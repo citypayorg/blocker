@@ -4,14 +4,10 @@
   "description": "Multiplayer online game using Phaser + WebSocket (Socket.IO)",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "",
-    "build": "gulp",
-    "build.watch": "gulp watch",
-    "dev": "",
-    "standard": "standard",
-    "standard.fix": "standard --fix",
-    "validate": "npm run standard"
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.3"
   },
   "author": "Nathachai Thongniran",
   "license": "MIT",
@@ -44,7 +40,12 @@
     ]
   },
   "dependencies": {
+    "cookie-parser": "^1.4.5",
     "express": "^4.16.2",
+    "express-error-handler": "^1.1.0",
+    "express-session": "^1.17.1",
+    "md5": "^2.3.0",
+    "mysql": "^2.18.1",
     "object-sizeof": "^1.2.0",
     "shortid": "^2.2.8",
     "socket.io": "^2.0.4"

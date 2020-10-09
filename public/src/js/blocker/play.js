@@ -349,8 +349,7 @@ Play.prototype = {
    * @param {Phaser.Sprite} creature - Phaser.Sprite that contain `Creature` object in `blr` property
    */
   logCreatureMessage: function (creature) {
-    var logText = creature.blr.info.type + ' ' + creature.blr.info.id +
-      ': ' + creature.blr.info.lastMessage
+    var logText = creature.blr.info.type + ' ' + creature.blr.info.id + ': ' + creature.blr.info.lastMessage
     UI.addTextToLogList(logText)
   },
 
@@ -1818,7 +1817,7 @@ Play.prototype = {
         this.player.blr.info.lastMessage = message
         this.player.blr.bubble.setText(message)
         this.player.blr.bubble.visible = true
-
+        
         // add message text to log
         this.logCreatureMessage(this.player)
 
@@ -2743,7 +2742,8 @@ Play.prototype = {
     this.spaceKey = GAME.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     this.enterKey = GAME.input.keyboard.addKey(Phaser.Keyboard.ENTER)
     this.cursors = GAME.input.keyboard.createCursorKeys()
-
+    //
+    
     // emitter
     this.setDashEmitter()
     this.setRecoverEmitter()
@@ -2853,6 +2853,8 @@ Play.prototype = {
             this.playerMoveByKeyboard()
           }
         }
+        ///////////// mobile 에서 움직이게
+        
 
         // fire (mouse over keyboard)
         // input - right click (fire follow mouse)

@@ -21,7 +21,7 @@ const SERVER_PORT = CONFIG.serverPort
 const EVENT_NAME = CONFIG.eventName
 const STATIC_PATH = PATH.join(__dirname, '/public')
 const COMMON_PATH = PATH.join(__dirname, '/common')
-const SERVER_HEARTBEAT = 100
+const SERVER_HEARTBEAT = 500 // 0.5 초로변경
 // const IS_DEBUG = CONFIG.isDebug
 
 /** @type {Array.CreatureInfo} */
@@ -50,8 +50,123 @@ APP.use('/public', EXPRESS.static(STATIC_PATH))
 APP.use('/common', EXPRESS.static(COMMON_PATH))
 
 APP.get('/', function (req, res) {
-  res.sendFile(STATIC_PATH + '/index.html')
+  //res.sendFile(STATIC_PATH + '/index.html')
+  res.sendFile(STATIC_PATH + '/login.html')
 })
+
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////// 2020-09-19 추가 ///////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//npm install mysql
+//npm install --save express-session
+//npm install --save cookie-parser
+//npm install --save express-error-handler
+//npm install --save md5
+var user_nick="";
+var db_config = require(__dirname + '/common/database.js');// 2020-09-13
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');  
+var expressSession = require('express-session');
+var expressErrorHandler = require('express-error-handler');
+var router = EXPRESS.Router();
+
+APP.use(bodyParser.urlencoded({extended:false}));
+APP.use(bodyParser.json());
+APP.use(cookieParser());
+APP.use(expressSession({
+    secret :'mysecretKey!23',
+    resave : true,
+    saveUninitialized :true
+    }));
+
+
+// post 로 넘어 오면 !!! 게임
+APP.post('/', function (req, res) {
+  console.log('/process/login2 라우팅 함수 연결...');
+  var md5 = require('md5');
+  var param_username = req.body.username;
+  var param_password = req.body.password;
+  console.log('요청 파라미터 >> username : '+param_username);
+
+  var conn = db_config.init();//2020-09-13
+  db_config.connect(conn);
+  var sql = "SELECT * FROM users WHERE username ='"+param_username+"' and password ='"+md5(param_password)+"'";
+  //var sql = "SELECT * FROM users WHERE username='"+param_username+"'";
+  //console.log( 'select ok - ' + sql);
+  conn.query(sql, function (err, rows, fields) 
+  {
+    if(err){
+        console.log('query is not excuted. select fail...\n' + err);
+        res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
+        res.end("<h1>문제가 발생 하였습니다. query is not excuted </h1>"); 
+        res.sendFile(STATIC_PATH + '/login.html')
+    }
+    else {
+      //res.render('list.ejs', {list : rows});
+      //console.log( 'select ok - ' + sql);
+      //for(var i=0; i<rows.length; i++){ console.log(i+':i / '+rows[i].username +'-'+ rows[i].CTP_address +'-'+ rows[i].id +'-'+ rows[i].nick); }
+      if(rows.length>0){
+        user_nick = rows[0].nick;
+        var user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
+        var sql2 = " "; 
+        sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
+        sql2 = sql2 + " VALUES (1,?,'CTP',?,CURDATE()+0,?) ";
+        sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1  ";
+        var params = [rows[0].id, rows[0].CTP_address, user_ip];
+        conn.query(sql2, params, function(err, rows2, fields2){
+          if(err){
+            console.log(err);
+          } else {
+            console.log('merge success !!!!');
+            console.log(rows2);
+          }
+        });
+        // login 성공
+        res.sendFile(STATIC_PATH + '/index.html')
+      }else{
+        res.end("<h1>비밀번호 오류??</h1>"); 
+        res.sendFile(STATIC_PATH + '/login.html')
+      }
+    }
+  });
+})
+
+// router.route('/').post(function(req, res)
+// {
+  
+// });
+
+// APP.get('/process/login2', function (req, res) {
+//   res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
+// 	res.end("<h1>Express 서버에서 " + req.user + " 응답한 결과입니다</h1>"); 
+// })
+      
+var errorHandler = expressErrorHandler({
+  static :{'404':'./public/404.html'}
+});
+//////////////////////////////////////////////////////
+// const expressip = require('express-ip');  // npm install express-ip
+// app.use(expressip().getIpInfoMiddleware);
+// const ipInfo = req.ipInfo;
+// var message = `Hey, you are browsing from ${ipInfo.city}, ${ipInfo.country}`;
+
+//var conn = db_config.init();//2020-09-13
+//app.get('/list', function (req, res) {
+//    var sql = 'SELECT * FROM BOARD';    
+//    conn.query(sql, function (err, rows, fields) {
+//        if(err) console.log('query is not excuted. select fail...\n' + err);
+//        else res.render('list.ejs', {list : rows});
+//    });
+//});
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////// 2020-09-19 추가 end ///////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
 
 SERVER.listen(SERVER_PORT, function (err) {
   if (err) {
@@ -125,10 +240,14 @@ function initVirtualMap () {
  * @todo n of init monster should be in config
  */
 function initMonsters () {
-  const nZombies = 8
-  const nMachines = 8
-  const nBats = 8
+  // const nZombies = 8
+  // const nMachines = 8
+  // const nBats = 8
+  const nZombies = 1
+  const nMachines = 1
+  const nBats = 1
 
+  //########### 미니맵 ###########
   for (let i = 0; i < nZombies; i++) {
     let creatureInfo = getNewZombieInfo()
     ZOMBIE_INFOS.push(creatureInfo)
@@ -453,7 +572,10 @@ function removePlayer (playerId) {
 IO.on('connection', function (socket) {
   const socketId = socket.id
   let playerInfo = getNewPlayerInfo()
-
+  if(user_nick!=null){
+    playerInfo.id = user_nick
+  }
+  
   UTIL.serverLog(playerInfo.id + ' is connect')
 
   // disconnect
@@ -803,9 +925,7 @@ function getNearestPlayer (monsterInfo, visibleRange) {
 
   if (!UTIL.isEmptyObject(nearestPlayerVector)) {
     data = {
-      monsterInfo: {
-        id: monsterInfo.id
-      },
+      monsterInfo: { id: monsterInfo.id },
       targetCreatureId: playerInfo.id, // unused
       targetVector: nearestPlayerVector
     }

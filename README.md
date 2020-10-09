@@ -1,3 +1,7 @@
+// 2020-10-04 
+E:\WWW\CTP_game\public\dist\js\bundle.js
+document.getElementById("dp_Chat").innerHTML = "<pre>"+t+"</pre>"+document.getElementById("dp_Chat").innerHTML; // dp_Chat
+
 # Blocker
 [![Build Status](https://travis-ci.org/jojoee/blocker.svg)](https://travis-ci.org/jojoee/blocker)
 
@@ -16,8 +20,6 @@ Multiplayer online game using Phaser + WebSocket (Socket.IO).
 ```
 
 ## Gifshot
-
-![Demo](https://i.imgur.com/Eqtse6G.gif)
 
 [![Blocker - Game play 1](https://raw.githubusercontent.com/jojoee/blocker/master/screenshot/play1.jpg "Blocker - Game play 1")](http://blocker.jojoee.com/)
 

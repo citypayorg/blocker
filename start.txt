@@ -1,0 +1,53 @@
+﻿cd D:\WWW\CTP_game
+d:
+
+pm2 list
+
+pm2 stop
+pm2 restart
+pm2 delete 0
+
+
+Getting Started
+Install Node.js
+Install Nodemon Bower Gulp: 
+	npm install -g nodemon yarn bower pm2
+Install dependencies: 
+	yarn && bower install
+Build client side
+- dev: `yarn build.watch`
+- prod: `yarn build`
+Start server side
+- dev: `nodemon app.js --watch app.js`
+- prod: `pm2 start app.js`
+
+------------------------------------------
+cd D:\WWW\CTP_game
+d:
+pm2 start app.js
+127.0.0.1:8001
+------------------------------------------
+
+
+
+bug fix
+npm install -g node-sass
+
+
+
+
+/public/dist/js/bundle.js
+
+
+
+https://github.com/jojoee/blocker
+
+
+게임테스트
+
+http://blocker.jojoee.com/
+
+http://blocker.jojoee.com/public/dist/js/bundle.js
+http://blocker.jojoee.com/public/dist/asset/image/loading.png
+http://blocker.jojoee.com/public/dist/asset/image/loading-border.png
+

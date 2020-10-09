@@ -5,7 +5,7 @@
 const UTIL = require('./../../../common/util')
 
 const Ui = {
-
+  logcurAccessCnt: document.getElementById('ly_curAccessCnt'), // 2020-09-14 현재 접속자 숫자
   logListEle: document.getElementById('logs'),
   creatureListEle: document.getElementById('creatures'),
   sidebarEle: document.getElementById('sidebar'),
