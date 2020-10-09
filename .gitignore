@@ -18,3 +18,4 @@ public/dist
 # lock
 package-lock.json
 yarn.lock
+common/database.js
