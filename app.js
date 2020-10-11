@@ -65,13 +65,22 @@ APP.get('/', function (req, res) {
 //npm install --save cookie-parser
 //npm install --save express-error-handler
 //npm install --save md5
+// npm install ejs
+var user_id="";
 var user_nick="";
+var user_avata="";
 var db_config = require(__dirname + '/common/database.js');// 2020-09-13
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');  
 var expressSession = require('express-session');
 var expressErrorHandler = require('express-error-handler');
 var router = EXPRESS.Router();
+// let ejs = require('ejs'); // 2020-10-11
+let fs  = require('fs'); // 2020-10-11
+
+// 화면 engine을 ejs로 설정
+// APP.set('view engine', 'ejs');
+// APP.engine('html', require('ejs').renderFile);
 
 APP.use(bodyParser.urlencoded({extended:false}));
 APP.use(bodyParser.json());
@@ -101,7 +110,7 @@ APP.post('/', function (req, res) {
     if(err){
         console.log('query is not excuted. select fail...\n' + err);
         res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
-        res.end("<h1>문제가 발생 하였습니다. query is not excuted </h1>"); 
+        res.end("<h1>error. query is not excuted </h1>"); 
         res.sendFile(STATIC_PATH + '/login.html')
     }
     else {
@@ -109,7 +118,9 @@ APP.post('/', function (req, res) {
       //console.log( 'select ok - ' + sql);
       //for(var i=0; i<rows.length; i++){ console.log(i+':i / '+rows[i].username +'-'+ rows[i].CTP_address +'-'+ rows[i].id +'-'+ rows[i].nick); }
       if(rows.length>0){
-        user_nick = rows[0].nick;
+        user_id     = rows[0].id;
+        user_nick   = rows[0].nick;
+        user_avata  = rows[0].avata;
         var user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
         var sql2 = " "; 
         sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
@@ -125,14 +136,59 @@ APP.post('/', function (req, res) {
           }
         });
         // login 성공
-        res.sendFile(STATIC_PATH + '/index.html')
+        // res.sendFile(STATIC_PATH + '/index.html');
+
+        res.statusCode = 302;
+        res.setHeader("Location", "/index");
+        res.end();
+        // 2020-10-11 추가 npm install new-line
+        //  https://stackoverflow.com/questions/33027089/res-sendfile-in-node-express-with-passing-data-along
+        //###############################################################
+        // const Transform = require('stream').Transform;
+        // const parser = new Transform();
+        // const newLineStream = require('new-line');
+        
+        // parser._transform = function(data, encoding, done) {
+        //   const str = data.toString().replace('</body>', '<input type="hidden" id="user_id" value="'+user_id+'"><input type="hidden" id="user_nick" value="'+user_nick+'"><input type="hidden" id="user_avata" value="'+user_avata+'"></body>');
+        //   this.push(str);
+        //   done();
+        // };
+        // 2020-10-11 npm install ejs
+        //################################################################
       }else{
-        res.end("<h1>비밀번호 오류??</h1>"); 
+        res.end("<h1>password maybe wrong</h1>"); 
         res.sendFile(STATIC_PATH + '/login.html')
       }
     }
   });
 })
+
+
+//################################################################
+// 2020-10-11 
+//################################################################
+const Transform = require('stream').Transform;
+const parser = new Transform();
+const newLineStream = require('new-line');
+
+APP.use('/index', (req, res) => {
+  parser._transform = function(data, encoding, done) {
+    const str = data.toString().replace('</body>', '<input type="hidden" id="user_id" value="'+user_id+'"><input type="hidden" id="user_nick" value="'+user_nick+'"><input type="hidden" id="user_avata" value="'+user_avata+'"></body>');
+    this.push(str);
+    done();
+  };
+  res.write('<!-- Begin stream -->\n');
+  fs
+  .createReadStream('./public/index.html')
+  .pipe(newLineStream())
+  .pipe(parser)
+  .on('end', () => {
+      res.write('\n<!-- End stream -->')
+  }).pipe(res);
+});
+//################################################################
+
+
 
 // router.route('/').post(function(req, res)
 // {
@@ -572,9 +628,10 @@ function removePlayer (playerId) {
 IO.on('connection', function (socket) {
   const socketId = socket.id
   let playerInfo = getNewPlayerInfo()
-  if(user_nick!=null){
-    playerInfo.id = user_nick
-  }
+  
+  //#############################################
+  if(user_nick!=null){ playerInfo.id = user_nick; }
+  //#############################################
   
   UTIL.serverLog(playerInfo.id + ' is connect')
 

@@ -41,12 +41,15 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
+    "ejs": "^3.1.5",
     "express": "^4.16.2",
     "express-error-handler": "^1.1.0",
     "express-session": "^1.17.1",
     "md5": "^2.3.0",
     "mysql": "^2.18.1",
+    "new-line": "^1.1.1",
     "object-sizeof": "^1.2.0",
+    "phaser": "^3.24.1",
     "shortid": "^2.2.8",
     "socket.io": "^2.0.4"
   },

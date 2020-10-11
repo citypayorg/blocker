@@ -1,6 +1,10 @@
 // 2020-10-04 
 E:\WWW\CTP_game\public\dist\js\bundle.js
 document.getElementById("dp_Chat").innerHTML = "<pre>"+t+"</pre>"+document.getElementById("dp_Chat").innerHTML; // dp_Chat
+// 2020-10-10 
+GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46),  --> 이미지 로그인 id 에 따라 변하게하고 싶음
+spawnHero: function (e, t) 에 GAME.load.image("hero", "/public/dist/asset/image/upload/"+e.info.id+".png", 46, 46);
+로 변경 .. 작동 하지 않음 ...
 
 # Blocker
 [![Build Status](https://travis-ci.org/jojoee/blocker.svg)](https://travis-ci.org/jojoee/blocker)
@@ -41,7 +45,8 @@ Start server side
 - dev: `nodemon app.js --watch app.js`
 - prod: `pm2 start app.js`
 ```
-
+/* "phaser": "^2.6.2", */  --> "phaser": "^3.24.1",
+npm install phaser@3.24.1
 ## Note
 ```
 1. Code guideline & Naming we use
@@ -138,3 +143,22 @@ take effect from subsequent request. (currently, there are only 2 events
 ### Data structure
 - Generate id, [1](http://stackoverflow.com/questions/24041220/sending-message-to-a-specific-id-in-socket-io-1-0/), [2](http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript), [3](https://github.com/dylang/shortid), [4](https://github.com/broofa/node-uuid)
 - [Remove / Generate client id](http://stackoverflow.com/questions/7702461/socket-io-custom-client-id)
+
+
+
+
+let Boot = function (GAME) {}
+Boot.prototype = {
+  init: function () {
+
+  },
+  preload: function () {
+    GAME.stage.backgroundColor = CONFIG.screenColor
+
+    GAME.load.image('loading', CONFIG.assetPath + '/image/loading.png')
+    GAME.load.image('loadingBorder', CONFIG.assetPath + '/image/loading-border.png')
+  },
+  create: function () {
+    GAME.state.start('Load')
+  }
+}

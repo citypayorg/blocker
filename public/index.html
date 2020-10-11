@@ -11,14 +11,6 @@ font-face { font-family: 'Roboto', sans-serif; }
 <link rel="stylesheet" href="/public/bower_components/bootstrap-sass-grid/css/bootstrap-sass-grid.css">
 <link rel="stylesheet" href="/public/dist/css/main.css">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!--
-__________.__                 __                 
-\______   \  |   ____   ____ |  | __ ___________ 
-|    |  _/  |  /  _ \_/ ___\|  |/ // __ \_  __ \
-|    |   \  |_(  <_> )  \___|    <\  ___/|  | \/
-|______  /____/\____/ \___  >__|_ \\___  >__|   
-        \/                 \/     \/    \/       
--->
 </head>
 <body>
 <div class="logo roboto">
@@ -136,11 +128,14 @@ __________.__                 __
   //   }, 100);
   // });
 </script>
-
 <script src="/socket.io/socket.io.js"></script>
 <script src="/public/bower_components/phaser/build/phaser.min.js"></script>
 <script src="/public/bower_components/phaser-state-transition-plugin/dist/phaser-state-transition-plugin.min.js"></script>
 <script src="/public/dist/js/bundle.js"></script>
-
+<script type="text/javascript">  
+  $(document).ready(function() {
+    // alert($('#user_id').val());
+  });
+</script>
 </body>
 </html>
