@@ -74,9 +74,9 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');  
 var expressSession = require('express-session');
 var expressErrorHandler = require('express-error-handler');
-var router = EXPRESS.Router();
+// var router = EXPRESS.Router();
 // let ejs = require('ejs'); // 2020-10-11
-let fs  = require('fs'); // 2020-10-11
+// let fs  = require('fs'); // 2020-10-11
 
 // 화면 engine을 ejs로 설정
 // APP.set('view engine', 'ejs');
@@ -137,10 +137,13 @@ APP.post('/', function (req, res) {
         });
         // login 성공
         // res.sendFile(STATIC_PATH + '/index.html');
+        // 2020-10-12 FSO 를 사용 하면 Error [ERR_STREAM_WRITE_AFTER_END]: write after end 이슈가 있어 index.html 을 서버단으로 빼고 new-line 제거
+        res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
+        res.end(indexPage(user_id,user_nick,user_avata)); 
 
-        res.statusCode = 302;
-        res.setHeader("Location", "/index");
-        res.end();
+        // res.statusCode = 302;
+        // res.setHeader("Location", "/index");
+        // res.end();
         // 2020-10-11 추가 npm install new-line
         //  https://stackoverflow.com/questions/33027089/res-sendfile-in-node-express-with-passing-data-along
         //###############################################################
@@ -167,25 +170,26 @@ APP.post('/', function (req, res) {
 //################################################################
 // 2020-10-11 
 //################################################################
-const Transform = require('stream').Transform;
-const parser = new Transform();
-const newLineStream = require('new-line');
+// const Transform = require('stream').Transform;
+// const parser = new Transform();
+// const newLineStream = require('new-line');
 
-APP.use('/index', (req, res) => {
-  parser._transform = function(data, encoding, done) {
-    const str = data.toString().replace('</body>', '<input type="hidden" id="user_id" value="'+user_id+'"><input type="hidden" id="user_nick" value="'+user_nick+'"><input type="hidden" id="user_avata" value="'+user_avata+'"></body>');
-    this.push(str);
-    done();
-  };
-  res.write('<!-- Begin stream -->\n');
-  fs
-  .createReadStream('./public/index.html')
-  .pipe(newLineStream())
-  .pipe(parser)
-  .on('end', () => {
-      res.write('\n<!-- End stream -->')
-  }).pipe(res);
-});
+// APP.use('/index', (req, res) => {
+//   indexPage(_user_id,_user_nick,_user_avata)
+//   // parser._transform = function(data, encoding, done) {
+//   //   const str = data.toString().replace('</body>', '<input type="hidden" id="user_id" value="'+user_id+'"><input type="hidden" id="user_nick" value="'+user_nick+'"><input type="hidden" id="user_avata" value="'+user_avata+'"></body>');
+//   //   this.push(str);
+//   //   done();
+//   // };
+//   // res.write('<!-- Begin stream -->\n');
+//   // fs
+//   // .createReadStream('./public/index.html')
+//   // .pipe(newLineStream())
+//   // .pipe(parser)
+//   // .on('end', () => {
+//   //     res.write('\n<!-- End stream -->')
+//   // }).pipe(res);
+// });
 //################################################################
 
 
@@ -1046,3 +1050,153 @@ setInterval(function () {
   updateMachine()
   updateBat()
 }, SERVER_HEARTBEAT)
+
+//2020-10-12 index.html 페이지 서버 단으로 이동
+function indexPage(_user_id,_user_nick,_user_avata){
+  var _html = '';
+  _html = _html +'<!doctype html>';
+  _html = _html +'<html>';
+  _html = _html +'<head>';
+  _html = _html +'<title>Blocker - The Hunter: Multiplayer online game</title>';
+  _html = _html +'<meta name="viewport" content="initial-scale=1">';
+  _html = _html +'<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">';
+  _html = _html +'<style>';
+  _html = _html +'font-face { font-family: "Roboto", sans-serif; }';
+  _html = _html +'.roboto { font-family: "Roboto", sans-serif; }';
+  _html = _html +'</style>';
+  _html = _html +'<link rel="stylesheet" href="/public/bower_components/bootstrap-sass-grid/css/bootstrap-sass-grid.css">';
+  _html = _html +'<link rel="stylesheet" href="/public/dist/css/main.css">';
+  _html = _html +'<script src="http://code.jquery.com/jquery-latest.min.js"></script>';
+  _html = _html +'</head>';
+  _html = _html +'<body>';
+  _html = _html +'<div class="logo roboto">';
+  _html = _html +'  Blocker - The Hunter: Multiplayer online game';
+  _html = _html +'</div>';
+  _html = _html +'<div class="container-fluid">';
+  _html = _html +'  <div class="row">';
+  _html = _html +'    <div class="wrapper">';
+  _html = _html +'      <div id="game-wrap">';
+  _html = _html +'      </div>';
+  _html = _html +'      <!-- #game-wrap -->';
+  _html = _html +'    </div>';
+  _html = _html +'  </div>';
+  _html = _html +'</div>';
+  _html = _html +'';
+  _html = _html +'<div id="sidebar" class="sidebar noselect transition">';
+  _html = _html +'  <div id="creature-widget" class="widget creature-widget">';
+  _html = _html +'    <ul class="creatures" id="creatures">';
+  _html = _html +'      ';
+  _html = _html +'    </ul>';
+  _html = _html +'    <!-- #creatures -->';
+  _html = _html +'  </div>';
+  _html = _html +'</div>';
+  _html = _html +'';
+  _html = _html +'<div class="footer transition">';
+  _html = _html +'  <div id="ly_curAccessCnt"></div>';
+  _html = _html +'  <div id="log-wrap">';
+  _html = _html +'    <ul id="logs">';
+  _html = _html +'    </ul>';
+  _html = _html +'    <!-- #logs -->';
+  _html = _html +'  </div>';
+  _html = _html +'</div>';
+  _html = _html +'<input id="txt_chat" type="text" class="message-input" placeholder="Message" maxlength="20" style="width:90%;margin-bottom:135px;" >';
+  _html = _html +'<!-- .message-input -->';
+  _html = _html +'<br/>';
+  _html = _html +'<p id="dp_Xy" class="message-input" style="margin-bottom:135px;margin-left:-100px;width:120px;">X:0,Y:0</p>';
+  _html = _html +'<div id="dp_Chat" class="message-input" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;"></div>';
+  _html = _html +'<div id="lyLeftmove" style="position:fixed;text-align:center;left:5px;top:270px;width:30px;height:150px;background-color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);border-radius:5px;">';
+  _html = _html +'  <!-- space 32 -->';
+  _html = _html +'  <img id="img_up" src="/public/dist/asset/image/move/up.png"       border="0" style="width:24px;height:24px;">';
+  _html = _html +'  <img id="img_left" src="/public/dist/asset/image/move/left.png"   border="0" style="width:24px;height:24px;">';
+  _html = _html +'  <img id="img_right" src="/public/dist/asset/image/move/right.png" border="0" style="width:24px;height:24px;">';
+  _html = _html +'  <br><br><br>';
+  _html = _html +'  <img id="img_chat" src="/public/dist/asset/image/move/chat.png"   border="0" onclick="jsfn_MoveChat();" style="width:24px;height:24px;" alt="모바일 상에서는 클릭시 대화시작 다시 클릭시 대화전송 입니다.">';
+  _html = _html +'</div>';
+  _html = _html +'<script>';
+  _html = _html +'  $(document).ready(function () {';
+  _html = _html +'      var isTouchDevice = "ontouchstart" in document.documentElement;';
+  _html = _html +'      $("#lyLeftmove").oncontextmenu = function() {return false;};';
+  _html = _html +'      $("#game-wrap").oncontextmenu = function() {return false;};';
+  _html = _html +'      // up pc and mobile both';
+  _html = _html +'      // 38 up';
+  _html = _html +'      $("#img_up").oncontextmenu = function() {return false;};';
+  _html = _html +'      $("#img_up").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move("38"); } });';
+  _html = _html +'      $("#img_up").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("38"); }});';
+  _html = _html +'      $("#img_up").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("38"); } });';
+  _html = _html +'      $("#img_up").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("38");}});';
+  _html = _html +'      ';
+  _html = _html +'      // 37 left ';
+  _html = _html +'      $("#img_left").oncontextmenu = function() {return false;};';
+  _html = _html +'      $("#img_left").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move("37"); } });';
+  _html = _html +'      $("#img_left").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("37"); }});';
+  _html = _html +'      $("#img_left").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("37"); } });';
+  _html = _html +'      $("#img_left").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("37");}});';
+  _html = _html +'      ';
+  _html = _html +'      // 39 right';
+  _html = _html +'      $("#img_right").oncontextmenu = function() {return false;};';
+  _html = _html +'      $("#img_right").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move("39"); } });';
+  _html = _html +'      $("#img_right").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("39"); }});';
+  _html = _html +'      $("#img_right").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("39"); } });';
+  _html = _html +'      $("#img_right").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("39");}});';
+  _html = _html +'  });';
+  _html = _html +'  $(document).on("contextmenu","img", function(e){';
+  _html = _html +'      //hide image ,show alert , etc..';
+  _html = _html +'      return false;';
+  _html = _html +'  });';
+  _html = _html +'  function jsfn_MoveChat(){';
+  _html = _html +'    var event = document.createEvent("Events");';
+  _html = _html +'    event.initEvent("keydown", true, true);';
+  _html = _html +'    event.keyCode = 13;';
+  _html = _html +'    document.getElementById("game-wrap").dispatchEvent(event);';
+  _html = _html +'    setTimeout("jsfn_MoveChatEnd()",100);';
+  _html = _html +'  }';
+  _html = _html +'  function jsfn_MoveChatEnd(){';
+  _html = _html +'    var event = document.createEvent("Events");';
+  _html = _html +'    event.initEvent("keyup", true, true);';
+  _html = _html +'    event.keyCode = 13;';
+  _html = _html +'    document.getElementById("game-wrap").dispatchEvent(event);';
+  _html = _html +'  }';
+  _html = _html +'';
+  _html = _html +'  function jsfn_Move(strKey){';
+  _html = _html +'    var event = document.createEvent("Events");';
+  _html = _html +'    event.initEvent("keydown", true, true);';
+  _html = _html +'    event.keyCode = strKey;';
+  _html = _html +'    document.getElementById("game-wrap").dispatchEvent(event);';
+  _html = _html +'    //setTimeout("jsfn_MoveStop("+strKey+")",200);';
+  _html = _html +'  }';
+  _html = _html +'  function jsfn_MoveStop(strKey){';
+  _html = _html +'    var event = document.createEvent("Events");';
+  _html = _html +'    event.initEvent("keyup", true, true);';
+  _html = _html +'    event.keyCode = strKey;';
+  _html = _html +'    document.getElementById("game-wrap").dispatchEvent(event);';
+  _html = _html +'  }';
+  _html = _html +'  function jsfn_Resize(){';
+  _html = _html +'';
+  _html = _html +'  }';
+  _html = _html +'  // $(window).bind("resize", function(e)';
+  _html = _html +'  // {';
+  _html = _html +'  //   if (window.RT) clearTimeout(window.RT);';
+  _html = _html +'  //   window.RT = setTimeout(function()';
+  _html = _html +'  //   {';
+  _html = _html +'  //     this.location.reload(false); /* false to get page from cache */';
+  _html = _html +'  //   }, 100);';
+  _html = _html +'  // });';
+  _html = _html +'</script>';
+  _html = _html +'<script src="/socket.io/socket.io.js"></script>';
+  _html = _html +'<script src="/public/bower_components/phaser/build/phaser.min.js"></script>';
+  _html = _html +'<script src="/public/bower_components/phaser-state-transition-plugin/dist/phaser-state-transition-plugin.min.js"></script>';
+  _html = _html +'<script src="/public/dist/js/bundle.js"></script>';
+  _html = _html +'<script type="text/javascript">  ';
+  _html = _html +'  $(document).ready(function() {';
+  _html = _html +'    // alert($("#user_id").val());';
+  _html = _html +'  });';
+  _html = _html +'</script>';
+  //########################################
+  _html = _html +'<input type="hidden" id="user_id" value="'+_user_id+'">';
+  _html = _html +'<input type="hidden" id="user_nick" value="'+_user_nick+'">';
+  _html = _html +'<input type="hidden" id="user_avata" value="'+_user_avata+'">';
+  //########################################
+  _html = _html +'</body>';
+  _html = _html +'</html>';
+  return _html;
+}

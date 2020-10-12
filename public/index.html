@@ -5,8 +5,8 @@
 <meta name="viewport" content="initial-scale=1">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 <style>
-font-face { font-family: 'Roboto', sans-serif; }
-.roboto { font-family: 'Roboto', sans-serif; }
+font-face { font-family: "Roboto", sans-serif; }
+.roboto { font-family: "Roboto", sans-serif; }
 </style>
 <link rel="stylesheet" href="/public/bower_components/bootstrap-sass-grid/css/bootstrap-sass-grid.css">
 <link rel="stylesheet" href="/public/dist/css/main.css">
@@ -46,44 +46,42 @@ font-face { font-family: 'Roboto', sans-serif; }
 <input id="txt_chat" type="text" class="message-input" placeholder="Message" maxlength="20" style="width:90%;margin-bottom:135px;" >
 <!-- .message-input -->
 <br/>
-<p id='dp_Xy' class="message-input" style="margin-bottom:135px;margin-left:-100px;width:120px;">X:0,Y:0</p>
-<div id='dp_Chat' class="message-input" style='width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;'></div>
+<p id="dp_Xy" class="message-input" style="margin-bottom:135px;margin-left:-100px;width:120px;">X:0,Y:0</p>
+<div id="dp_Chat" class="message-input" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;"></div>
 <div id="lyLeftmove" style="position:fixed;text-align:center;left:5px;top:270px;width:30px;height:150px;background-color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);border-radius:5px;">
   <!-- space 32 -->
   <img id="img_up" src="/public/dist/asset/image/move/up.png"       border="0" style="width:24px;height:24px;">
-  <!--<img id="img_dn" src="/public/dist/asset/image/move/dn.png"       border="0" onmouseover="jsfn_Move('40');" onmouseout="jsfn_MoveStop('40');" style="width:24px;height:24px;">-->
   <img id="img_left" src="/public/dist/asset/image/move/left.png"   border="0" style="width:24px;height:24px;">
   <img id="img_right" src="/public/dist/asset/image/move/right.png" border="0" style="width:24px;height:24px;">
-  <!-- <br><font color="white">♠</font><br> -->
   <br><br><br>
   <img id="img_chat" src="/public/dist/asset/image/move/chat.png"   border="0" onclick="jsfn_MoveChat();" style="width:24px;height:24px;" alt="모바일 상에서는 클릭시 대화시작 다시 클릭시 대화전송 입니다.">
 </div>
 <script>
   $(document).ready(function () {
-      var isTouchDevice = 'ontouchstart' in document.documentElement;
+      var isTouchDevice = "ontouchstart" in document.documentElement;
       $("#lyLeftmove").oncontextmenu = function() {return false;};
       $("#game-wrap").oncontextmenu = function() {return false;};
       // up pc and mobile both
       // 38 up
       $("#img_up").oncontextmenu = function() {return false;};
-      $("#img_up").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move('38'); } });
-      $("#img_up").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop('38'); }});
-      $('#img_up').on('touchstart', function(){ if (isTouchDevice)  { jsfn_Move('38'); } });
-      $('#img_up').on('touchend', function(){ if (isTouchDevice)  {jsfn_MoveStop('38');}});
+      $("#img_up").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move("38"); } });
+      $("#img_up").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("38"); }});
+      $("#img_up").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("38"); } });
+      $("#img_up").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("38");}});
       
       // 37 left 
       $("#img_left").oncontextmenu = function() {return false;};
-      $("#img_left").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move('37'); } });
-      $("#img_left").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop('37'); }});
-      $('#img_left').on('touchstart', function(){ if (isTouchDevice)  { jsfn_Move('37'); } });
-      $('#img_left').on('touchend', function(){ if (isTouchDevice)  {jsfn_MoveStop('37');}});
+      $("#img_left").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move("37"); } });
+      $("#img_left").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("37"); }});
+      $("#img_left").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("37"); } });
+      $("#img_left").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("37");}});
       
       // 39 right
       $("#img_right").oncontextmenu = function() {return false;};
-      $("#img_right").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move('39'); } });
-      $("#img_right").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop('39'); }});
-      $('#img_right').on('touchstart', function(){ if (isTouchDevice)  { jsfn_Move('39'); } });
-      $('#img_right').on('touchend', function(){ if (isTouchDevice)  {jsfn_MoveStop('39');}});
+      $("#img_right").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move("39"); } });
+      $("#img_right").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("39"); }});
+      $("#img_right").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("39"); } });
+      $("#img_right").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("39");}});
   });
   $(document).on("contextmenu","img", function(e){
       //hide image ,show alert , etc..
@@ -91,35 +89,35 @@ font-face { font-family: 'Roboto', sans-serif; }
   });
   function jsfn_MoveChat(){
     var event = document.createEvent("Events");
-    event.initEvent('keydown', true, true);
+    event.initEvent("keydown", true, true);
     event.keyCode = 13;
-    document.getElementById('game-wrap').dispatchEvent(event);
+    document.getElementById("game-wrap").dispatchEvent(event);
     setTimeout("jsfn_MoveChatEnd()",100);
   }
   function jsfn_MoveChatEnd(){
     var event = document.createEvent("Events");
-    event.initEvent('keyup', true, true);
+    event.initEvent("keyup", true, true);
     event.keyCode = 13;
-    document.getElementById('game-wrap').dispatchEvent(event);
+    document.getElementById("game-wrap").dispatchEvent(event);
   }
 
   function jsfn_Move(strKey){
     var event = document.createEvent("Events");
-    event.initEvent('keydown', true, true);
+    event.initEvent("keydown", true, true);
     event.keyCode = strKey;
-    document.getElementById('game-wrap').dispatchEvent(event);
+    document.getElementById("game-wrap").dispatchEvent(event);
     //setTimeout("jsfn_MoveStop("+strKey+")",200);
   }
   function jsfn_MoveStop(strKey){
     var event = document.createEvent("Events");
-    event.initEvent('keyup', true, true);
+    event.initEvent("keyup", true, true);
     event.keyCode = strKey;
-    document.getElementById('game-wrap').dispatchEvent(event);
+    document.getElementById("game-wrap").dispatchEvent(event);
   }
   function jsfn_Resize(){
 
   }
-  // $(window).bind('resize', function(e)
+  // $(window).bind("resize", function(e)
   // {
   //   if (window.RT) clearTimeout(window.RT);
   //   window.RT = setTimeout(function()
@@ -134,7 +132,7 @@ font-face { font-family: 'Roboto', sans-serif; }
 <script src="/public/dist/js/bundle.js"></script>
 <script type="text/javascript">  
   $(document).ready(function() {
-    // alert($('#user_id').val());
+    // alert($("#user_id").val());
   });
 </script>
 </body>
