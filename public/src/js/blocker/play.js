@@ -2713,9 +2713,9 @@ Play.prototype = {
     GAME.physics.startSystem(Phaser.Physics.ARCADE)
 
     // bg
-    GAME.stage.backgroundColor = '#3db148'
+    GAME.stage.backgroundColor = '#000000'; //3db148
 
-    // map - floor
+    // map - floor 50x50 map.json
     var map = GAME.add.tilemap('mapTile')
     map.addTilesetImage('map')
     this.floorGroup = map.createLayer(0)
