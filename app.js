@@ -1176,9 +1176,9 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'    event.keyCode = strKey;';
   _html = _html +'    document.getElementById("game-wrap").dispatchEvent(event);';
   _html = _html +'  }';
-  _html = _html +'  function jsfn_Resize(){';
+  // _html = _html +'  function jsfn_Resize(){';
 //_html = _html +'';
-  _html = _html +'  }';
+  // _html = _html +'  }';
   // _html = _html +'  // $(window).bind("resize", function(e)';
   // _html = _html +'  // {';
   // _html = _html +'  //   if (window.RT) clearTimeout(window.RT);';
@@ -1187,6 +1187,20 @@ function indexPage(_user_id,_user_nick,_user_avata){
   // _html = _html +'  //     this.location.reload(false); /* false to get page from cache */';
   // _html = _html +'  //   }, 100);';
   // _html = _html +'  // });';
+  // 모바일 화면 회전시 캐시에서 reload 처리 
+  _html = _html +' var _rotate_phone_cnt =0;';
+  _html = _html +' $("document").ready(function() {';
+  _html = _html +'     $(window).trigger("orientationchange");';
+  _html = _html +' });';
+  _html = _html +' $(window).bind("orientationchange", function(e) {';
+  _html = _html +'  var orientation = window.orientation;';
+  _html = _html +'if (orientation == 90 || orientation == -90) { '; //jsfn_Reload(); 
+  _html = _html +'  _rotate_phone_cnt=_rotate_phone_cnt+1;jsfn_Reload();'; //alert("landscape");
+  _html = _html +'} else {   '; //
+  _html = _html +'  _rotate_phone_cnt=_rotate_phone_cnt+1;jsfn_Reload();'; //alert("portrait");
+  _html = _html +'}';
+  _html = _html +'});';
+  _html = _html +'function jsfn_Reload(){ if(_rotate_phone_cnt>1){this.location.reload(false); }}'; ///* false to get page from cache */}
   _html = _html +'</script>';
   _html = _html +'<script src="/socket.io/socket.io.js"></script>';
   _html = _html +'<script src="/public/bower_components/phaser/build/phaser.min.js"></script>';
