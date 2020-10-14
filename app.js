@@ -1058,7 +1058,8 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'<html>';
   _html = _html +'<head>';
   _html = _html +'<title>Blocker - The Hunter: Multiplayer online game</title>';
-  _html = _html +'<meta name="viewport" content="initial-scale=1">';
+  //시작 스케일을 1.0 최대 스케일을 1.0으로 설정해 놓은 뒤, 사용자가 스케일을 조절할 수 없게 하겠다는 코드
+  _html = _html +'<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">';
   _html = _html +'<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">';
   _html = _html +'<style>';
   _html = _html +'font-face { font-family: "Roboto", sans-serif; }';
@@ -1109,6 +1110,13 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'  <tr><td colspan="2" align="center"><img id="img_chat" src="/public/dist/asset/image/move/chat.png"   border="0" onclick="jsfn_MoveChat();" style="width:40px;height:40px;" alt="모바일 상에서는 클릭시 대화시작 다시 클릭시 대화전송 입니다."></td></tr></table>';
   _html = _html +'</div>';
   _html = _html +'<script>';
+  //만약 두 손가락으로 화면을 클릭 시 이 이벤트를 무시
+  _html = _html +'  document.documentElement.addEventListener("touchstart", function (event) { if (event.touches.length > 1) { event.preventDefault(); } }, false); ';
+  // 만약 두번 연속 탭이 0.3초보다 짧다면 이를 무시
+  _html = _html +'  var lastTouchEnd = 0; ';
+  _html = _html +'  document.documentElement.addEventListener("touchend", function (event) { ';
+  _html = _html +'  var now = (new Date()).getTime();if (now - lastTouchEnd <= 300) { event.preventDefault();  } lastTouchEnd = now; }, false); ';
+
   _html = _html +'  $(document).ready(function () {';
   _html = _html +'      var isTouchDevice = "ontouchstart" in document.documentElement;';
   _html = _html +'      $("#lyLeftmove").oncontextmenu = function() {return false;};';
