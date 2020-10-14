@@ -1136,7 +1136,7 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'      $("#img_right").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("39"); } });';
   _html = _html +'      $("#img_right").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("39");}});';
   _html = _html +'  });';
-  _html = _html +'  $(document).on("contextmenu","img", function(e){';
+  _html = _html +'  $(document).on("contextmenu", function(e){';
   // _html = _html +'      //hide image ,show alert , etc..';
   _html = _html +'      return false;';
   _html = _html +'  });';
