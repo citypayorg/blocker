@@ -6,6 +6,10 @@ GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46),  --> 이
 spawnHero: function (e, t) 에 GAME.load.image("hero", "/public/dist/asset/image/upload/"+e.info.id+".png", 46, 46);
 로 변경 .. 작동 하지 않음 ...
 
+//기존 space key 는 채팅시 충돌로 CTRL 키로 변경
+E:\WWW\CTP_game\public\src\js\blocker\play.js
+E:\WWW\CTP_game\public\dist\js\bundle.js
+
 # Blocker
 [![Build Status](https://travis-ci.org/jojoee/blocker.svg)](https://travis-ci.org/jojoee/blocker)
 

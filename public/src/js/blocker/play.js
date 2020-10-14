@@ -90,7 +90,8 @@ let Play = function (GAME) {
 
   // input
   this.cursors = null
-  this.spaceKey = null
+  // this.spaceKey = null
+  this.ctrlKey = null
   this.enterKey = null
 }
 
@@ -2739,7 +2740,8 @@ Play.prototype = {
     this.treeGroup = map.createLayer(2)
 
     // keyboard
-    this.spaceKey = GAME.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+    //this.spaceKey = GAME.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+    this.ctrlKey   = GAME.input.keyboard.addKey(Phaser.Keyboard.CONTROL)
     this.enterKey = GAME.input.keyboard.addKey(Phaser.Keyboard.ENTER)
     this.cursors = GAME.input.keyboard.createCursorKeys()
     //
@@ -2858,10 +2860,11 @@ Play.prototype = {
 
         // fire (mouse over keyboard)
         // input - right click (fire follow mouse)
-        // input - spacebar (fire follow rotation)
+        // input - spacebar (fire follow rotation) //ctrl 키로 변경
         if (GAME.input.activePointer.rightButton.isDown) {
           this.playerFireArrow(this.player)
-        } else if (this.spaceKey.isDown) {
+        // } else if (this.spaceKey.isDown) {
+        } else if (this.ctrlKey.isDown) {
           this.playerFireArrowByKeyboard(this.player)
         }
 
