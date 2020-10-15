@@ -1102,10 +1102,11 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'<br/>';
   _html = _html +'<p id="dp_Xy" class="message-input noselect" style="margin-bottom:135px;margin-left:-100px;width:120px;" onclick="this.blur();">X:0,Y:0</p>';
   _html = _html +'<div id="dp_Chat" class="message-input noselect" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;" onclick="this.blur();"></div>';
-  _html = _html +'<div id="lyLeftmove" class="noselect" style="position:fixed;text-align:center;right:5px;top:180px;width:85px;height:130px;background-color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);border-radius:5px;" onclick="this.blur();">';
+  _html = _html +'<div id="lyLeftmove" class="noselect" style="position:fixed;text-align:center;right:5px;top:180px;width:85px;height:170px;background-color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);border-radius:5px;" onclick="this.blur();">';
   _html = _html +'  <table border="0"><tr><td colspan="2" align="center"><img id="img_up" src="/public/dist/asset/image/move/up.png" border="0" style="width:40px;height:40px;"></td></tr>';
   _html = _html +'  <tr><td><img id="img_left" src="/public/dist/asset/image/move/left.png"   border="0" style="width:40px;height:40px;"></td>';
   _html = _html +'  <td><img id="img_right" src="/public/dist/asset/image/move/right.png" border="0" style="width:40px;height:40px;"></td></tr>';
+  _html = _html +'  <tr><td colspan="2" align="center"><img id="img_fire" src="/public/dist/asset/image/move/fire.png"   border="0" style="width:40px;height:40px;"></td></tr>';
   // _html = _html +'  <!-- space 32 -->';
   _html = _html +'  <tr><td colspan="2" align="center"><img id="img_chat" src="/public/dist/asset/image/move/chat.png"   border="0" onclick="jsfn_MoveChat();" style="width:40px;height:40px;" alt="모바일 상에서는 클릭시 대화시작 다시 클릭시 대화전송 입니다."></td></tr></table>';
   _html = _html +'</div>';
@@ -1142,6 +1143,13 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'      $("#img_right").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("39"); }});';
   _html = _html +'      $("#img_right").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("39"); } });';
   _html = _html +'      $("#img_right").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("39");}});';
+  // _html = _html +'      // 17 Ctrl';
+  _html = _html +'      $("#img_fire").oncontextmenu = function() {return false;};';
+  _html = _html +'      $("#img_fire").mousedown(function(event) { if (isTouchDevice == false) { jsfn_Move("17"); } });';
+  _html = _html +'      $("#img_fire").mouseup(function(event) { if (isTouchDevice == false) { jsfn_MoveStop("17"); }});';
+  _html = _html +'      $("#img_fire").on("touchstart", function(){ if (isTouchDevice)  { jsfn_Move("17"); } });';
+  _html = _html +'      $("#img_fire").on("touchend", function(){ if (isTouchDevice)  {jsfn_MoveStop("17");}});';
+  
   _html = _html +'  });';
   _html = _html +'  $(document).on("contextmenu", function(e){';
   _html = _html +'      return false;';
