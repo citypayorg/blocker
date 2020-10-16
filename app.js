@@ -66,11 +66,15 @@ APP.get('/', function (req, res) {
 //npm install --save express-error-handler
 //npm install --save md5
 // npm install ejs
-var user_id="";
-var user_nick="";
-var user_avata="";
-var user_level = 0;
-var _preMsg = ""; //이전 태화로그 50개
+var user_id           = ""; // user idx
+var user_nick         = ""; // user 닉네임
+var user_avata        = ""; // user 아바타 Default N
+var user_level        = 0; // 접속한 후 _levelUpTime 분당 + 1
+var user_ip           = "";
+var user_CTP_address  = ""; // CTP 입금 주소
+var _preMsg           = ""; //이전 대화(Chat)로그 50개
+var _levelUpTime      = 60 * 15; // 60 초 * 15 분 레벨업 인터벌타임
+
 var db_config = require(__dirname + '/common/database.js');// 2020-09-13
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');  
@@ -127,12 +131,14 @@ APP.post('/', function (req, res) {
         user_nick   = rows[0].nick;
         user_avata  = rows[0].avata;
         user_level  = rows[0].user_level;
+        user_CTP_address= rows[0].CTP_address;
         // console.log('유저레벨:'+user_level);
-        var user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
+        user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
+
         var sql2 = " "; 
         sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
         sql2 = sql2 + " VALUES (1,?,'CTP',?,CURDATE()+0,?) ";
-        sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1  ";
+        sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1, last_time=now() ";
         var params = [rows[0].id, rows[0].CTP_address, user_ip];
         conn.query(sql2, params, function(err, rows2, fields2){
           if(err){
@@ -151,7 +157,7 @@ APP.post('/', function (req, res) {
       }else{
         res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
         // res.end("<h1>password maybe wrong</h1>"); 
-        res.end("<scrip>alert('password maybe wrong');document.location.href='/';</scrip>"); 
+        res.end("<script>alert('password maybe wrong');document.location.href='/';</script>"); 
         res.sendFile(STATIC_PATH + '/login.html')
       }
     }
@@ -684,7 +690,7 @@ IO.on('connection', function (socket) {
     if (playerIdx > -1) {
       PLAYER_INFOS[playerIdx].lastMessage = lastMessage
       PLAYER_INFOS[playerIdx].lastMessageTimestamp = lastMessageTimestamp
-      saveChat(user_id,user_nick,lastMessage);  // 2020-10-16
+      saveChat(user_id,user_nick,lastMessage);  // 2020-10-16 서버에 채팅 저장
       socket.broadcast.emit(EVENT_NAME.player.message, data)
     }
   })
@@ -1085,6 +1091,57 @@ function getPreChatLog(_param, callback){
     return callback(_chatLog);
   });
 }
+
+// 15분마다 레벨을 올려주자~~~~
+// SELECT last_time ,TIMESTAMPDIFF(SECOND, last_time, NOW() ) AS TDiff FROM `tbl_game` WHERE game_idx='1' and user_idx='2' and yyyymmdd=CURDATE()+0;
+function intervalFunc() {
+
+  var conn = db_config.init();//2020-09-13
+  db_config.connect(conn);
+  var sql = "SELECT last_time ,TIMESTAMPDIFF(SECOND, last_time, NOW() ) AS TDiff FROM tbl_game WHERE game_idx='1' and user_idx='"+user_id+"' and yyyymmdd=CURDATE()+0";
+  // console.log(sql);
+  var _TDiff =0;
+  conn.query(sql, function (err, rows, fields) 
+  {
+    if(!err){
+      if(rows.length>0){
+        for(var i=0; i<rows.length; i++)
+        { 
+          _TDiff = rows[i].TDiff;
+        }
+        console.log(_TDiff +' : _TDiff');
+        if (_TDiff>= _levelUpTime) // 15분이 지났으면 minuteCnt + 1
+        {
+          var sql2 = " "; 
+          sql2 = sql2 + " UPDATE `tbl_game` set minuteCnt = minuteCnt + 1, last_time=now() WHERE game_idx='1' and user_idx='"+user_id+"' and yyyymmdd=CURDATE()+0";
+          var params2 = [user_id, user_CTP_address, user_ip];
+          conn.query(sql2, params2, function(err2, rows2, fields2){
+            if(err2){ console.log(err2);
+            } else {
+              console.log('UPDATE success !!!!');
+            }
+          });
+          // try { document.getElementById("dp_Chat").innerHTML = "<pre>" + r.id + " : " + t + "</pre>" + document.getElementById("dp_Chat").innerHTML; } catch (e) { }
+        }
+      }else{
+        //rows.length == 0 이면 날자가 바뀌어 insert 해줘야 함
+        var sql2 = " "; 
+        sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
+        sql2 = sql2 + " VALUES (1,?,'CTP',?,CURDATE()+0,?) ";
+        sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1, last_time=now() ";
+        var params2 = [user_id, user_CTP_address, user_ip];
+        conn.query(sql2, params2, function(err2, rows2, fields2){
+          if(err2){ console.log(err2);
+          } else {
+            console.log('INSERT success !!!!');
+          }
+        });
+      }
+    }
+  });
+}
+
+setInterval(intervalFunc, 1000*_levelUpTime); // 15분 마다 로그 쌓기
 
 //2020-10-12 index.html 페이지 서버 단으로 이동
 function indexPage(_user_id,_user_nick,_user_avata){
