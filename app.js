@@ -69,11 +69,15 @@ APP.get('/', function (req, res) {
 var user_id="";
 var user_nick="";
 var user_avata="";
+var user_level = 0;
+var _preMsg = ""; //이전 태화로그 50개
 var db_config = require(__dirname + '/common/database.js');// 2020-09-13
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');  
 var expressSession = require('express-session');
 var expressErrorHandler = require('express-error-handler');
+
+
 // var router = EXPRESS.Router();
 // let ejs = require('ejs'); // 2020-10-11
 // let fs  = require('fs'); // 2020-10-11
@@ -99,12 +103,13 @@ APP.post('/', function (req, res) {
   var param_username = req.body.username;
   var param_password = req.body.password;
   console.log('요청 파라미터 >> username : '+param_username);
+  // 로그인 시 이전 대화 로그 50개 가저 오기
+  getPreChatLog(null, function(_result){_preMsg = _result; }); //
 
   var conn = db_config.init();//2020-09-13
   db_config.connect(conn);
-  var sql = "SELECT * FROM users WHERE username ='"+param_username+"' and password ='"+md5(param_password)+"'";
-  //var sql = "SELECT * FROM users WHERE username='"+param_username+"'";
-  //console.log( 'select ok - ' + sql);
+  var sql = "SELECT a.* , (SELECT IFNULL(sum(minuteCnt),0) FROM tbl_game WHERE game_idx='1' and user_idx=a.id) as user_level FROM users a WHERE username ='"+param_username+"' and password ='"+md5(param_password)+"'";
+  // console.log(sql);
   conn.query(sql, function (err, rows, fields) 
   {
     if(err){
@@ -121,6 +126,8 @@ APP.post('/', function (req, res) {
         user_id     = rows[0].id;
         user_nick   = rows[0].nick;
         user_avata  = rows[0].avata;
+        user_level  = rows[0].user_level;
+        console.log('유저레벨:'+user_level);
         var user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
         var sql2 = " "; 
         sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
@@ -130,36 +137,21 @@ APP.post('/', function (req, res) {
         conn.query(sql2, params, function(err, rows2, fields2){
           if(err){
             console.log(err);
+            //conn.release();
           } else {
             console.log('merge success !!!!');
-            console.log(rows2);
+            // console.log(rows2);
+            //conn.release();
           }
         });
         // login 성공
-        // res.sendFile(STATIC_PATH + '/index.html');
-        // 2020-10-12 FSO 를 사용 하면 Error [ERR_STREAM_WRITE_AFTER_END]: write after end 이슈가 있어 index.html 을 서버단으로 빼고 new-line 제거
         res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
         res.end(indexPage(user_id,user_nick,user_avata)); 
 
-        // res.statusCode = 302;
-        // res.setHeader("Location", "/index");
-        // res.end();
-        // 2020-10-11 추가 npm install new-line
-        //  https://stackoverflow.com/questions/33027089/res-sendfile-in-node-express-with-passing-data-along
-        //###############################################################
-        // const Transform = require('stream').Transform;
-        // const parser = new Transform();
-        // const newLineStream = require('new-line');
-        
-        // parser._transform = function(data, encoding, done) {
-        //   const str = data.toString().replace('</body>', '<input type="hidden" id="user_id" value="'+user_id+'"><input type="hidden" id="user_nick" value="'+user_nick+'"><input type="hidden" id="user_avata" value="'+user_avata+'"></body>');
-        //   this.push(str);
-        //   done();
-        // };
-        // 2020-10-11 npm install ejs
-        //################################################################
       }else{
-        res.end("<h1>password maybe wrong</h1>"); 
+        res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
+        // res.end("<h1>password maybe wrong</h1>"); 
+        res.end("<scrip>alert('password maybe wrong');document.location.href='/';</scrip>"); 
         res.sendFile(STATIC_PATH + '/login.html')
       }
     }
@@ -692,6 +684,7 @@ IO.on('connection', function (socket) {
     if (playerIdx > -1) {
       PLAYER_INFOS[playerIdx].lastMessage = lastMessage
       PLAYER_INFOS[playerIdx].lastMessageTimestamp = lastMessageTimestamp
+      saveChat(user_id,user_nick,lastMessage);  // 2020-10-16
       socket.broadcast.emit(EVENT_NAME.player.message, data)
     }
   })
@@ -1051,6 +1044,48 @@ setInterval(function () {
   updateBat()
 }, SERVER_HEARTBEAT)
 
+//2020-10-16 - 채팅저장
+function saveChat(user_id,user_nick,msg){
+  var conn = db_config.init();
+  db_config.connect(conn);
+  var sql2 = " "; 
+  sql2 = sql2 + " INSERT INTO `tbl_game_chat`(`game_idx`, `user_idx`, `nick`, `msg`) ";
+  sql2 = sql2 + " VALUES (1,?,?,?) ";
+  var params = [user_id, user_nick, msg];
+  conn.query(sql2, params, function(err, rows2, fields2){
+    if(err){
+      //console.log(err);
+      //conn.release();
+    } else {
+      //console.log('merge success !!!!');
+      //console.log(rows2);
+      //conn.release();
+    }
+  });
+}
+
+
+
+function getPreChatLog(_param, callback){
+  var conn = db_config.init();
+  db_config.connect(conn);
+  var sql = "SELECT nick, msg FROM tbl_game_chat ORDER BY chat_idx DESC  LIMIT 50"; // _param
+
+  conn.query(sql, function(err, rows){
+    if (err){ 
+      throw err;
+    }
+    var _chatLog = "";
+    if(rows.length>0){
+      for(var i=0; i<rows.length; i++)
+      { 
+        _chatLog = _chatLog +""+ rows[i].nick +":" + rows[i].msg.replace("\'","`") +"<br/>";
+      }
+    }
+    return callback(_chatLog);
+  });
+}
+
 //2020-10-12 index.html 페이지 서버 단으로 이동
 function indexPage(_user_id,_user_nick,_user_avata){
   var _html = '';
@@ -1101,7 +1136,13 @@ function indexPage(_user_id,_user_nick,_user_avata){
   // _html = _html +'<!-- .message-input -->';
   _html = _html +'<br/>';
   _html = _html +'<p id="dp_Xy" class="message-input noselect" style="margin-bottom:135px;margin-left:-100px;width:120px;" onclick="this.blur();">X:0,Y:0</p>';
-  _html = _html +'<div id="dp_Chat" class="message-input noselect" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;" onclick="this.blur();"></div>';
+  _html = _html +'<div id="dp_Chat" class="message-input noselect" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;" onclick="this.blur();">';
+  //2020-10-16 채팅로그추가
+  _html = _html +'user_level : ' +  user_level +'<br/>';
+  _html = _html +'---------- pre log ----------<br/>';
+  _html = _html +'' + _preMsg+'<br/>';
+  _html = _html +'</div>';
+
   _html = _html +'<div id="lyLeftmove" class="noselect" style="position:fixed;text-align:center;right:5px;top:180px;width:85px;height:170px;background-color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);border-radius:5px;" onclick="this.blur();">';
   _html = _html +'  <table border="0"><tr><td colspan="2" align="center"><img id="img_up" src="/public/dist/asset/image/move/up.png" border="0" style="width:40px;height:40px;"></td></tr>';
   _html = _html +'  <tr><td><img id="img_left" src="/public/dist/asset/image/move/left.png"   border="0" style="width:40px;height:40px;"></td>';
@@ -1184,17 +1225,7 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'    event.keyCode = strKey;';
   _html = _html +'    document.getElementById("game-wrap").dispatchEvent(event);';
   _html = _html +'  }';
-  // _html = _html +'  function jsfn_Resize(){';
-//_html = _html +'';
-  // _html = _html +'  }';
-  // _html = _html +'  // $(window).bind("resize", function(e)';
-  // _html = _html +'  // {';
-  // _html = _html +'  //   if (window.RT) clearTimeout(window.RT);';
-  // _html = _html +'  //   window.RT = setTimeout(function()';
-  // _html = _html +'  //   {';
-  // _html = _html +'  //     this.location.reload(false); /* false to get page from cache */';
-  // _html = _html +'  //   }, 100);';
-  // _html = _html +'  // });';
+
   // 모바일 화면 회전시 캐시에서 reload 처리 
   _html = _html +' var _rotate_phone_cnt =0;';
   _html = _html +' $("document").ready(function() {';
