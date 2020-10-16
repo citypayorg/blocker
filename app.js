@@ -127,7 +127,7 @@ APP.post('/', function (req, res) {
         user_nick   = rows[0].nick;
         user_avata  = rows[0].avata;
         user_level  = rows[0].user_level;
-        console.log('유저레벨:'+user_level);
+        // console.log('유저레벨:'+user_level);
         var user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
         var sql2 = " "; 
         sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
