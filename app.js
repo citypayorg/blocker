@@ -373,7 +373,8 @@ function getNewBatInfo () {
  * @returns {CreatureInfo}
  */
 function getNewPlayerInfo () {
-  return getNewCreatureInfo('hero', 200, 3, 8)
+  // return getNewCreatureInfo('hero', 200, 3, 8)
+  return getNewCreatureInfo('hero', 200, 3, 8,'','')
 }
 
 /**
@@ -384,11 +385,13 @@ function getNewPlayerInfo () {
  * @param {number} maxLife
  * @returns {CreatureInfo}
  */
-function getNewCreatureInfo (type, velocitySpeed, life, maxLife) {
+// function getNewCreatureInfo (type, velocitySpeed, life, maxLife) {
+function getNewCreatureInfo (type, velocitySpeed, life, maxLife, nick ,avata) {
   const creatureId = getUniqueCreatureId()
   const startVector = getRandomStartCreatureVector()
-  const creatureInfo = new CreatureInfo(creatureId, type, startVector, velocitySpeed, life, maxLife)
-
+  // const creatureInfo = new CreatureInfo(creatureId, type, startVector, velocitySpeed, life, maxLife)
+  const creatureInfo = new CreatureInfo(creatureId, type, startVector, velocitySpeed, life, maxLife, nick ,avata)
+  //, nick ,avata 의 data 필요 ....
   return creatureInfo
 }
 
@@ -632,11 +635,15 @@ IO.on('connection', function (socket) {
   let playerInfo = getNewPlayerInfo()
   
   //#############################################
-  if(user_nick!=null){ playerInfo.id = user_nick; 
+  if(user_nick!=null){ 
+    playerInfo.id = user_nick;
   }
   else{
-    playerInfo.id =user_id;
+    playerInfo.id = user_id;
   }
+  playerInfo.nick = user_nick; // 2020-10-18
+  playerInfo.avata = user_avata; // 2020-10-18
+
   //#############################################
   
   UTIL.serverLog(playerInfo.id + ' is connect')
