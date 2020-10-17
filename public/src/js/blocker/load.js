@@ -1,4 +1,26 @@
 const CONFIG = require('./config')
+var db_config = require(__dirname + '/common/database.js');// 2020-10-18
+var _addimage = getPreChatLog(null, function(_result){_addimage = _result; }); //
+
+function getPreChatLog(_param, callback){
+  var conn = db_config.init();
+  db_config.connect(conn);
+  // var sql = "SELECT GROUP_CONCAT(id) as preload_img FROM users WHERE avata = 'Y'"; // _param
+  var sql = "SELECT id as preload_img FROM users WHERE avata = 'Y'"; 
+  conn.query(sql, function(err, rows){
+    if (err){ 
+      throw err;
+    }
+    var _imgLog = "";
+    if(rows.length>0){
+      for(var i=0; i<rows.length; i++)
+      { 
+        _imgLog = _imgLog +"GAME.load.image('hero"+i+"', '/public/dist/asset/image/upload/'"+rows[i].id+"'.png', 46, 46)";
+      }
+    }
+    return callback(_imgLog);
+  });
+}
 
 // load all game assets
 let Load = function (GAME) {}
@@ -82,6 +104,7 @@ Load.prototype = {
     // bullet
     GAME.load.image('laserBullet', CONFIG.assetPath + '/image/bullet/laser.png')
     GAME.load.image('arrowBullet', CONFIG.assetPath + '/image/bullet/arrow.png')
+    _addimage
   },
 
   create: function () {
