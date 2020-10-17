@@ -13,7 +13,8 @@ node_modules
 bower_components
 
 # build
-public/dist
+# public/dist
+public/dist/asset
 
 # lock
 package-lock.json

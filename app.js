@@ -635,14 +635,15 @@ IO.on('connection', function (socket) {
   let playerInfo = getNewPlayerInfo()
   
   //#############################################
-  if(user_nick!=null){ 
-    playerInfo.id = user_nick;
-  }
-  else{
-    playerInfo.id = user_id;
-  }
-  playerInfo.nick = user_nick; // 2020-10-18
-  playerInfo.avata = user_avata; // 2020-10-18
+  // if(user_nick!=null){ 
+  //   playerInfo.id = user_nick;
+  // }
+  // else{
+  //   playerInfo.id = user_id;
+  // }
+  playerInfo.id     = user_id;
+  playerInfo.nick   = user_nick; // 2020-10-18
+  playerInfo.avata  = user_avata; // 2020-10-18
 
   //#############################################
   
