@@ -72,7 +72,6 @@ var user_avata        = ""; // user 아바타 Default N
 var user_level        = 0; // 접속한 후 _levelUpTime 분당 + 1
 var user_ip           = "";
 var user_CTP_address  = ""; // CTP 입금 주소
-var _preMsg           = ""; //이전 대화(Chat)로그 50개
 var _levelUpTime      = 60 * 15; // 60 초 * 15 분 레벨업 인터벌타임
 
 var db_config = require(__dirname + '/common/database.js');// 2020-09-13
@@ -107,9 +106,7 @@ APP.post('/', function (req, res) {
   var param_username = req.body.username;
   var param_password = req.body.password;
   console.log('요청 파라미터 >> username : '+param_username);
-  // 로그인 시 이전 대화 로그 50개 가저 오기
-  getPreChatLog(null, function(_result){_preMsg = _result; }); //
-
+  
   var conn = db_config.init();//2020-09-13
   db_config.connect(conn);
   var sql = "SELECT a.* , (SELECT IFNULL(sum(minuteCnt),0) FROM tbl_game WHERE game_idx='1' and user_idx=a.id) as user_level FROM users a WHERE username ='"+param_username+"' and password ='"+md5(param_password)+"'";
@@ -1155,10 +1152,13 @@ function intervalFunc() {
 
 setInterval(intervalFunc, 1000*_levelUpTime); // 15분 마다 로그 쌓기
 
-//2020-10-18 Pre_load image
-var _addimage = getPreChatLog(null, function(_result){_addimage = _result; }); //
+// 로그인 시 이전 대화 로그 50개 가저 오기
+var _preMsg = getPreChatLog(null, function(_result){_preMsg = _result; }); //이전 대화(Chat)로그 50개
 
-function getPreChatLog(_param, callback){
+//2020-10-18 Pre_load image
+var _addimage = getPreLimg(null, function(_imgLog){_addimage = _imgLog; }); //
+
+function getPreLimg(_param, callback){
   var conn = db_config.init();
   db_config.connect(conn);
   // var sql = "SELECT GROUP_CONCAT(id) as preload_img FROM users WHERE avata = 'Y'"; // _param

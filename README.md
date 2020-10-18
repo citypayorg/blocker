@@ -9,6 +9,17 @@ spawnHero: function (e, t) 에 GAME.load.image("hero", "/public/dist/asset/image
 //기존 space key 는 채팅시 충돌로 CTRL 키로 변경
 E:\WWW\CTP_game\public\src\js\blocker\play.js
 E:\WWW\CTP_game\public\dist\js\bundle.js
+/////////////////////
+playerInfo.nick   = user_nick; // 2020-10-18
+playerInfo.avata  = user_avata; // 2020-10-18
+
+, nick: r.nick, avata: r.avata
+
+E:\WWW\CTP_game\app.js
+E:\WWW\CTP_game\common\module.js
+E:\WWW\CTP_game\public\dist\js\bundle.js
+E:\WWW\CTP_game\public\src\js\blocker\play.js
+/////////////////////
 
 # Blocker
 [![Build Status](https://travis-ci.org/jojoee/blocker.svg)](https://travis-ci.org/jojoee/blocker)

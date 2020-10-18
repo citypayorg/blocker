@@ -918,8 +918,6 @@ var _typeof = "function" == typeof Symbol
                 e.anchor.setTo(.5, 1), 
                 t.anchor.setTo(.5, 1)
             }, preload: function () {
-                // eval();                
-                
                 //################################################
                 var _user_id        = $("#user_id").val();
                 var _user_nick      = $("#user_nick").val();
@@ -972,8 +970,9 @@ eval(_txtpreload);
         setInterval(function () { g = l.getCurrentUtcTimestamp(), i(EVENT_NAME.player.ping) }, 1e3);
 
         var E = function (e) {
-            this.isGameReady = !1, this.playerAngularVelocity = 200, this.lastMiniMapUpdatingTimestamp = 0, this.miniMapUpdatingDelay = 500,
-                this.enterKeyDelay = 200, this.bubbleDelay = 3e3, this.VTMap = {}, this.player = {}, 
+            this.isGameReady = !1, this.playerAngularVelocity = 200, this.lastMiniMapUpdatingTimestamp = 0, this.miniMapUpdatingDelay = 250,
+                this.enterKeyDelay = 200, this.bubbleDelay = 3e3, this.VTMap = {}, 
+                this.player = {}, 
                 this.floorGroup = null, this.vtmapDebugGroup = null,
                 this.stoneShadowGroup = null, this.stoneGroup = null, this.monsterShadowGroup = null, 
                 this.zombieWeaponGroup = null, this.zombieGroup = null,
@@ -1050,8 +1049,10 @@ eval(_txtpreload);
             }, setHeroBubble: function (e) {
                 var t = { font: "12px " + n.mainFontFamily, fill: "#000", backgroundColor: "#ffffff", align: "center" }, 
                 r = GAME.add.text(0, 0, "", t);
-                r.anchor.set(.5, 2.4), r.padding.set(0), r.visible = !1, e.blr.bubble = r, 
-                this.heroBubbleGroup.add(e.blr.bubble), this.updateCreatureBubble(e)
+                r.anchor.set(.5, 2.4), r.padding.set(0), 
+                r.visible = !1, e.blr.bubble = r, 
+                this.heroBubbleGroup.add(e.blr.bubble), 
+                this.updateCreatureBubble(e)
             }, updateCreatureBubble: function (e) {
                 e.blr.bubble.visible && e.blr.info.lastMessage 
                 && (this.updateCreatureBubbleText(e), this.updateCreatureBubblePosition(e))
@@ -1059,16 +1060,22 @@ eval(_txtpreload);
                 var t = e.blr.info.lastMessage;
                 e.blr.bubble.setText(t)
             }, updateCreatureBubblePosition: function (e) { e.blr.bubble.x = e.x, e.blr.bubble.y = e.y 
-            }, updateCreatureBubbleVisibility: function (e) { l.getCurrentUtcTimestamp() - e.blr.info.lastMessageTimestamp > this.bubbleDelay 
+            }, updateCreatureBubbleVisibility: function (e) { 
+                l.getCurrentUtcTimestamp() - e.blr.info.lastMessageTimestamp > this.bubbleDelay 
                 && (e.blr.bubble.visible = !1)
             }, setCreatureLabel: function (e) {
-                var t = { font: "13px " + n.mainFontFamily, fill: "#fff", align: "left" }, r = GAME.add.text(0, 0, "", t);
-                e.addChild(r), e.blr.label = r, this.updateCreatureLabel(e)
-            }, updateCreatureLabel: function (e) { this.updateCreatureLabelText(e), this.updateCreatureLabelPosition(e) 
+                var t = { font: "13px " + n.mainFontFamily, fill: "#fff", align: "left" }, 
+                r = GAME.add.text(0, 0, "", t);
+                e.addChild(r), e.blr.label = r, 
+                this.updateCreatureLabel(e)
+            }, updateCreatureLabel: function (e) { 
+                this.updateCreatureLabelText(e), 
+                this.updateCreatureLabelPosition(e) 
             }, updateCreatureLabelText: function (e) {
                 // 2020-10-18
-                var _nickChk = e.blr.info.nick==null?e.blr.info.id:e.blr.info.nick;
-                var t = _nickChk + " " + e.blr.info.life + "/" + e.blr.info.maxLife;
+                // var _user_nick  = $("#user_nick").val();
+                var _nickChk    = e.blr.info.nick==null?e.blr.info.id:e.blr.info.nick;
+                var t           = _nickChk + " " + e.blr.info.life + "/" + e.blr.info.maxLife;
                 // var t = e.blr.info.id + " " + e.blr.info.life + "/" + e.blr.info.maxLife;
                 e.blr.label.setText(t)
             }, updateCreatureLabelPosition: function (e) { 
@@ -1140,7 +1147,8 @@ eval(_txtpreload);
                 // if(e.info.id != _user_id){ alert('e.info.id:'+e.info.id + '/ _user_id : ' + _user_id);}
                 void 0 === t && (t = e.info.startVector);
                 var r = e.phrInfo.bodyMass, 
-                    //i = GAME.add.sprite(t.x, t.y, "hero"); // ############
+                    //i = GAME.add.sprite(t.x, t.y, "hero"); 
+                    // ############ 내가 접속한게 아니면 다른 사람 이미지로 표시
                     i = (e.info.id != _user_id) ? GAME.add.sprite(t.x, t.y, "hero_"+e.info.id) : GAME.add.sprite(t.x, t.y, "hero");
                 i.rotation = t.rotation, 
                 i.blr = e, 
@@ -1294,7 +1302,7 @@ eval(_txtpreload);
                         var r = e.blr.info;
                         // i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector }, recoveredFrom: t })
                         i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector
-                            // , user_nick: r.user_nick, user_avata: r.user_avata
+                            , nick: r.nick, avata: r.avata
                          }, recoveredFrom: t })
                 }, damageCreature: 
                     function (e, t) { "hero" === e.blr.info.type ? this.isPlayer(e) ? this.damagePlayer(e, t) : this.damageEnemy(e, t) : this.damageMonster(e, t) 
@@ -1397,7 +1405,7 @@ eval(_txtpreload);
                     var e = l.getCurrentUtcTimestamp();
                     if (this.player.blr.misc.isTyping) {
                         this.player.blr.updateLastEnterTimestamp(e),
-                            this.player.blr.misc.isTyping = !1;
+                        this.player.blr.misc.isTyping = !1;
 
                         var t = UI.getMessageInput();
                         if (t) {
@@ -1409,9 +1417,15 @@ eval(_txtpreload);
 
                             var r = this.player.blr.info;
                             i(EVENT_NAME.player.message,
-                                { id: r.id, life: r.life, lastVector: r.lastVector, lastMessage: r.lastMessage, lastMessageTimestamp: r.lastMessageTimestamp })
+                                { id: r.id, life: r.life, lastVector: r.lastVector, lastMessage: r.lastMessage
+                                    , lastMessageTimestamp: r.lastMessageTimestamp 
+                                    , nick: r.nick, avata: r.avata
+                                })
                             ////############################################# 2020-10-04 dp_Chat
-                            try { document.getElementById("dp_Chat").innerHTML = "<pre>" + r.id + " : " + t + "</pre>" + document.getElementById("dp_Chat").innerHTML; } catch (e) { }
+                            // 다른 사용자 말한 것 화면에 추가
+                            var _sender_nick=r.nick;// 2020-10-18
+                            if(_sender_nick==null){_sender_nick = r.id;}
+                            try { document.getElementById("dp_Chat").innerHTML = "<pre>" + _sender_nick + " : " + t + "</pre>" + document.getElementById("dp_Chat").innerHTML; } catch (e) { }
                             try { document.getElementById("dp_Xy").innerHTML = "X:" + Math.round(this.player.x, 1) + ",Y:" + Math.round(this.player.y, 1) + ""; } catch (e) { }
                         }
                         UI.disableMessageInput()
@@ -1509,9 +1523,10 @@ eval(_txtpreload);
                     var t = e.id, r = e.life, i = e.lastVector, 
                     o = e.lastMessageTimestamp, n = e.lastMessage, 
                     a = this.getEnemyByPlayerId(t);
-                    //var _nick = e.nick,_avata = e.avata;// 2020-10-18
-                    //2020-10-17다른 사용자 말한 것 화면에 추가
-                    try { document.getElementById("dp_Chat").innerHTML = "<pre>" + e.id + " : " + n + "</pre>" + document.getElementById("dp_Chat").innerHTML; } catch (e) { }
+                    // 다른 사용자 말한 것 화면에 추가
+                    var _sender_nick=e.nick;// 2020-10-18
+                    if(_sender_nick==null){_sender_nick = t;}
+                    try { document.getElementById("dp_Chat").innerHTML = "<pre>" + _sender_nick + " : " + n + "</pre>" + document.getElementById("dp_Chat").innerHTML; } catch (e) { }
                     l.isEmptyObject(a) || (this.forceUpdateEnemyAfterGotSubsequentRequest(a, r, i),
                         a.blr.updateLastMessageTimestamp(o), 
                         a.blr.info.lastMessage = n,
@@ -1800,7 +1815,8 @@ eval(_txtpreload);
                         this.batGroup.forEachAlive(function (e) { this.autoMove(e) }, this), this.updateMinimap()
                     }
                 }, preRender: function () {
-                    this.isGameReady && (this.player.alive && this.updateCreatureLabelText(this.player),
+                    this.isGameReady && (this.player.alive 
+                        && this.updateCreatureLabelText(this.player), //
                         this.enemyGroup.forEachAlive(function (e) { this.updateCreatureLabelText(e) }, this),
                         this.zombieGroup.forEachAlive(function (e) { this.updateCreatureLabelText(e) }, this),
                         this.machineGroup.forEachAlive(function (e) { this.updateCreatureLabelText(e) }, this),
