@@ -374,7 +374,7 @@ function getNewBatInfo () {
  */
 function getNewPlayerInfo () {
   // return getNewCreatureInfo('hero', 200, 3, 8)
-  return getNewCreatureInfo('hero', 200, 3, 8,'','')
+  return getNewCreatureInfo('hero', 200, 3, 8,user_nick,user_avata)
 }
 
 /**

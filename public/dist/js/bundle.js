@@ -918,36 +918,41 @@ var _typeof = "function" == typeof Symbol
                 e.anchor.setTo(.5, 1), 
                 t.anchor.setTo(.5, 1)
             }, preload: function () {
+                // eval();                
+                
                 //################################################
-                var _user_id        = $('#user_id').val();
-                var _user_nick      = $('#user_nick').val();
-                var _user_avata     = $('#user_avata').val();
-                var _user_preloadImg= $('#user_preloadImg').val();
+                var _user_id        = $("#user_id").val();
+                var _user_nick      = $("#user_nick").val();
+                var _user_avata     = $("#user_avata").val();
+                var _user_preloadImg= $("#user_preloadImg").val();
                 //################################################
-                this.setPreloadingBg(), this.setPreloadingImage(), this.setPreloadingTitle(),
-                GAME.load.tilemap("mapTile",            i.assetPath + "/image/map.json", null, Phaser.Tilemap.TILED_JSON),
-                GAME.load.image("map",                  i.assetPath + "/image/map.png"              , 46, 46),
-                GAME.load.spritesheet("zombie",         i.assetPath + "/image/monster/zombie.png"   , 46, 46),
-                GAME.load.spritesheet("machine",        i.assetPath + "/image/monster/machine.png"  , 46, 46),
-                GAME.load.spritesheet("bat",            i.assetPath + "/image/monster/bat.png"      , 46, 46),
+                let _txtpreload='';
+                // _txtpreload=_txtpreload +'';
+                _txtpreload=_txtpreload +'this.setPreloadingBg(), this.setPreloadingImage(), this.setPreloadingTitle(),';
+                _txtpreload=_txtpreload +'GAME.load.tilemap("mapTile",            i.assetPath + "/image/map.json", null, Phaser.Tilemap.TILED_JSON),';
+                _txtpreload=_txtpreload +'GAME.load.image("map",                  i.assetPath + "/image/map.png"              , 46, 46),';
+                _txtpreload=_txtpreload +'GAME.load.spritesheet("zombie",         i.assetPath + "/image/monster/zombie.png"   , 46, 46),';
+                _txtpreload=_txtpreload +'GAME.load.spritesheet("machine",        i.assetPath + "/image/monster/machine.png"  , 46, 46),';
+                _txtpreload=_txtpreload +'GAME.load.spritesheet("bat",            i.assetPath + "/image/monster/bat.png"      , 46, 46),';
 //################################################
 // GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46), 
 // GAME.load.image("hero", "/public/dist/asset/image/upload/"+e.info.id+".png", 46, 46)
-(_user_avata=='N'||_user_avata==''||_user_avata==null)? 
-    GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46) 
-    : GAME.load.image("hero", "/public/dist/asset/image/upload/"+_user_id+".png", 46, 46),
+_txtpreload=_txtpreload +'(_user_avata=="N"||_user_avata==""||_user_avata==null)? ';
+_txtpreload=_txtpreload +'GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46) ';
+_txtpreload=_txtpreload +': GAME.load.image("hero", "/public/dist/asset/image/upload/"+_user_id+".png", 46, 46),';
 //################################################
-_user_preloadImg    // 2020-10-18 사용자 아바타
-                GAME.load.image("dashParticle",         i.assetPath + "/image/particle/dash.png"),
-                GAME.load.image("damageParticle",       i.assetPath + "/image/particle/damage.png"),
-                GAME.load.image("recoverParticle",      i.assetPath + "/image/particle/recover.png"),
-                GAME.load.image("shadow",               i.assetPath + "/image/misc/shadow.png"),
-                GAME.load.spritesheet("handsWeapon",    i.assetPath + "/image/weapon/hands.png"     , 80, 70),
-                GAME.load.spritesheet("laserTurretWeapon", i.assetPath + "/image/weapon/laser-turret.png", 52, 46),
-                GAME.load.spritesheet("wingsWeapon",    i.assetPath + "/image/weapon/wings.png"     , 46, 84),
-                GAME.load.spritesheet("bowWeapon",      i.assetPath + "/image/weapon/bow.png"       , 160, 160),
-                GAME.load.image("laserBullet",          i.assetPath + "/image/bullet/laser.png"),
-                GAME.load.image("arrowBullet",          i.assetPath + "/image/bullet/arrow.png")
+_txtpreload=_txtpreload + _user_preloadImg    // 2020-10-18 사용자 아바타
+_txtpreload=_txtpreload +'GAME.load.image("dashParticle",         i.assetPath + "/image/particle/dash.png"),';
+_txtpreload=_txtpreload +'GAME.load.image("damageParticle",       i.assetPath + "/image/particle/damage.png"),';
+_txtpreload=_txtpreload +'GAME.load.image("recoverParticle",      i.assetPath + "/image/particle/recover.png"),';
+_txtpreload=_txtpreload +'GAME.load.image("shadow",               i.assetPath + "/image/misc/shadow.png"),';
+_txtpreload=_txtpreload +'GAME.load.spritesheet("handsWeapon",    i.assetPath + "/image/weapon/hands.png"     , 80, 70),';
+_txtpreload=_txtpreload +'GAME.load.spritesheet("laserTurretWeapon", i.assetPath + "/image/weapon/laser-turret.png", 52, 46),';
+_txtpreload=_txtpreload +'GAME.load.spritesheet("wingsWeapon",    i.assetPath + "/image/weapon/wings.png"     , 46, 84),';
+_txtpreload=_txtpreload +'GAME.load.spritesheet("bowWeapon",      i.assetPath + "/image/weapon/bow.png"       , 160, 160),';
+_txtpreload=_txtpreload +'GAME.load.image("laserBullet",          i.assetPath + "/image/bullet/laser.png"),';
+_txtpreload=_txtpreload +'GAME.load.image("arrowBullet",          i.assetPath + "/image/bullet/arrow.png")';
+eval(_txtpreload);
             }, create: function () {
                 GAME.state.start("Play")
             }
@@ -1066,21 +1071,25 @@ _user_preloadImg    // 2020-10-18 사용자 아바타
                 var t = _nickChk + " " + e.blr.info.life + "/" + e.blr.info.maxLife;
                 // var t = e.blr.info.id + " " + e.blr.info.life + "/" + e.blr.info.maxLife;
                 e.blr.label.setText(t)
-            }, updateCreatureLabelPosition: function (e) { e.blr.label.x = -e.blr.label.width / 2 - 0, e.blr.label.y = -e.height / 2 - e.blr.label.height / 2 - 10 
+            }, updateCreatureLabelPosition: function (e) { 
+                e.blr.label.x = -e.blr.label.width / 2 - 0, 
+                e.blr.label.y = -e.height / 2 - e.blr.label.height / 2 - 10 
             }, spawnZombie: function (e) {
                 var t = new p(e), r = this.spawnMonster(this.zombieGroup, t);
                 r.animations.add("blink", [0, 1, 0]);
 
                 var i = GAME.add.sprite(r.x, r.y, "handsWeapon");
-                i.anchor.set(.5), i.animations.add("attack", [0, 1, 2, 3, 4]), i.animations.play("attack", 10, !0, !1), GAME.physics.enable(i), r.blr.weapon = i,
-                    this.zombieWeaponGroup.add(r.blr.weapon), r.body.moves = !1
+                i.anchor.set(.5), i.animations.add("attack", [0, 1, 2, 3, 4]), 
+                i.animations.play("attack", 10, !0, !1), GAME.physics.enable(i), r.blr.weapon = i,
+                this.zombieWeaponGroup.add(r.blr.weapon), r.body.moves = !1
             }, spawnMachine: function (e) {
                 var t = new c(e), r = this.spawnMonster(this.machineGroup, t);
                 r.animations.add("blink", [0, 1, 0]);
 
                 var i = GAME.add.sprite(r.x, r.y, "laserTurretWeapon");
-                i.anchor.set(.5), i.animations.add("attack", [0, 1, 2]), i.animations.play("attack", 10, !0, !1), GAME.physics.enable(i), r.blr.weapon = i,
-                    this.machineWeaponGroup.add(r.blr.weapon);
+                i.anchor.set(.5), i.animations.add("attack", [0, 1, 2]), 
+                i.animations.play("attack", 10, !0, !1), GAME.physics.enable(i), r.blr.weapon = i,
+                this.machineWeaponGroup.add(r.blr.weapon);
 
                 var o = GAME.add.group();
                 o.enableBody = !0, o.physicsBodyType = Phaser.Physics.ARCADE, 
@@ -1093,13 +1102,18 @@ _user_preloadImg    // 2020-10-18 사용자 아바타
                 r.animations.add("blink", [0, 1, 0]);
 
                 var i = GAME.add.sprite(r.x, r.y, "wingsWeapon");
-                i.anchor.set(.5), i.animations.add("attack", [0, 1, 2, 3]), i.animations.play("attack", 10, !0, !1), GAME.physics.enable(i), r.blr.weapon = i,
-                    this.batWeaponGroup.add(r.blr.weapon), r.body.moves = !1, r.scale.setTo(.7, .7), r.blr.shadow.scale.setTo(.5, .5), r.blr.weapon.scale.setTo(.7, .7)
+                i.anchor.set(.5), i.animations.add("attack", [0, 1, 2, 3]), 
+                i.animations.play("attack", 10, !0, !1), GAME.physics.enable(i), r.blr.weapon = i,
+                this.batWeaponGroup.add(r.blr.weapon), r.body.moves = !1, 
+                r.scale.setTo(.7, .7), r.blr.shadow.scale.setTo(.5, .5), 
+                r.blr.weapon.scale.setTo(.7, .7)
             }, spawnMonster: function (e, t) {
-                var r = t.phrInfo, i = t.info.startVector, o = r.spriteName, n = r.bodyOffset, a = r.width - 2 * n, s = r.height - 2 * n
+                var r = t.phrInfo, i = t.info.startVector, o = r.spriteName, 
+                n = r.bodyOffset, a = r.width - 2 * n, s = r.height - 2 * n
                 , l = r.bodyMass, u = e.create(i.x, i.y, o);
-                GAME.physics.enable(u), u.anchor.set(.5), u.body.setSize(a, s, n, n), u.body.tilePadding.set(n, n), u.body.mass = l,
-                    u.body.rotation = i.rotation, u.body.collideWorldBounds = !0, u.blr = t;
+                GAME.physics.enable(u), u.anchor.set(.5), u.body.setSize(a, s, n, n), 
+                u.body.tilePadding.set(n, n), u.body.mass = l,
+                u.body.rotation = i.rotation, u.body.collideWorldBounds = !0, u.blr = t;
 
                 var h = GAME.add.sprite(u.x, u.y, "shadow");
                 return h.anchor.set(.1), h.scale.setTo(.7, .7), h.alpha = .3, u.blr.shadow = h, this.monsterShadowGroup.add(u.blr.shadow), 
@@ -1278,7 +1292,10 @@ _user_preloadImg    // 2020-10-18 사용자 아바타
                     function (e, t) { 
                 }, recoverHero: function (e, t) {
                         var r = e.blr.info;
-                        i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector }, recoveredFrom: t })
+                        // i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector }, recoveredFrom: t })
+                        i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector
+                            // , user_nick: r.user_nick, user_avata: r.user_avata
+                         }, recoveredFrom: t })
                 }, damageCreature: 
                     function (e, t) { "hero" === e.blr.info.type ? this.isPlayer(e) ? this.damagePlayer(e, t) : this.damageEnemy(e, t) : this.damageMonster(e, t) 
                 }, damageMonster: function (e, t) {
