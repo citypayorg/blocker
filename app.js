@@ -1155,6 +1155,29 @@ function intervalFunc() {
 
 setInterval(intervalFunc, 1000*_levelUpTime); // 15분 마다 로그 쌓기
 
+//2020-10-18 Pre_load image
+var _addimage = getPreChatLog(null, function(_result){_addimage = _result; }); //
+
+function getPreChatLog(_param, callback){
+  var conn = db_config.init();
+  db_config.connect(conn);
+  // var sql = "SELECT GROUP_CONCAT(id) as preload_img FROM users WHERE avata = 'Y'"; // _param
+  var sql = "SELECT id FROM users WHERE avata = 'Y'"; 
+  conn.query(sql, function(err, rows){
+    if (err){ 
+      throw err;
+    }
+    var _imgLog = "";
+    if(rows.length>0){
+      for(var i=0; i<rows.length; i++)
+      { 
+        _imgLog = _imgLog +"GAME.load.image('hero_"+rows[i].id+"', '/public/dist/asset/image/upload/"+rows[i].id+".png', 46, 46),";
+      }
+    }
+    return callback(_imgLog);
+  });
+}
+
 //2020-10-12 index.html 페이지 서버 단으로 이동
 function indexPage(_user_id,_user_nick,_user_avata){
   var _html = '';
@@ -1207,7 +1230,7 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'<p id="dp_Xy" class="message-input noselect" style="margin-bottom:135px;margin-left:-100px;width:120px;" onclick="this.blur();">X:0,Y:0</p>';
   _html = _html +'<div id="dp_Chat" class="message-input noselect" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;" onclick="this.blur();">';
   //2020-10-16 채팅로그추가
-  _html = _html +'user_level : ' +  user_level +'<br/>';
+  _html = _html +'적립토큰수(1000개=1코인) : ' +  user_level +'<br/>';
   _html = _html +'---------- pre log ----------<br/>';
   _html = _html +'' + _preMsg+'<br/>';
   _html = _html +'</div>';
@@ -1318,6 +1341,7 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'<input type="hidden" id="user_id" value="'+_user_id+'">';
   _html = _html +'<input type="hidden" id="user_nick" value="'+_user_nick+'">';
   _html = _html +'<input type="hidden" id="user_avata" value="'+_user_avata+'">';
+  _html = _html +'<input type="hidden" id="user_preloadImg" value="'+_addimage+'">';
   //########################################
   _html = _html +'</body>';
   _html = _html +'</html>';

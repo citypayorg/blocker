@@ -922,6 +922,7 @@ var _typeof = "function" == typeof Symbol
                 var _user_id        = $('#user_id').val();
                 var _user_nick      = $('#user_nick').val();
                 var _user_avata     = $('#user_avata').val();
+                var _user_preloadImg= $('#user_preloadImg').val();
                 //################################################
                 this.setPreloadingBg(), this.setPreloadingImage(), this.setPreloadingTitle(),
                 GAME.load.tilemap("mapTile",            i.assetPath + "/image/map.json", null, Phaser.Tilemap.TILED_JSON),
@@ -936,6 +937,7 @@ var _typeof = "function" == typeof Symbol
     GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46) 
     : GAME.load.image("hero", "/public/dist/asset/image/upload/"+_user_id+".png", 46, 46),
 //################################################
+_user_preloadImg    // 2020-10-18 사용자 아바타
                 GAME.load.image("dashParticle",         i.assetPath + "/image/particle/dash.png"),
                 GAME.load.image("damageParticle",       i.assetPath + "/image/particle/damage.png"),
                 GAME.load.image("recoverParticle",      i.assetPath + "/image/particle/recover.png"),
@@ -989,8 +991,8 @@ var _typeof = "function" == typeof Symbol
                     t = this.getRandomStartedCreaturePosition();
                     GAME.physics.arcade.distanceToXY(e, t.x, t.y) > 600 && (r = !1)
                 } return t
-            }, updateCreatureLastVector: function (e) { e.blr.info.lastVector = { x: e.x, y: e.y, rotation: e.rotation } },
-            getRotationBetweenCreatureAndMouse: function (e) {
+            }, updateCreatureLastVector: function (e) { e.blr.info.lastVector = { x: e.x, y: e.y, rotation: e.rotation } 
+            }, getRotationBetweenCreatureAndMouse: function (e) {
                 return Math.atan2(GAME.input.y - (e.position.y - GAME.camera.y),
                     GAME.input.x - (e.position.x - GAME.camera.x))
             }, updateCreatureRotationByFollowingMouse: function (e) {
@@ -1041,11 +1043,13 @@ var _typeof = "function" == typeof Symbol
                 var r = e.blr.info.type + " " + e.blr.info.id + " was died by " + t;
                 UI.addTextToLogList(r)
             }, setHeroBubble: function (e) {
-                var t = { font: "12px " + n.mainFontFamily, fill: "#000", backgroundColor: "#ffffff", align: "center" }, r = GAME.add.text(0, 0, "", t);
-                r.anchor.set(.5, 2.4), r.padding.set(0), r.visible = !1, e.blr.bubble = r, this.heroBubbleGroup.add(e.blr.bubble), this.updateCreatureBubble(e)
+                var t = { font: "12px " + n.mainFontFamily, fill: "#000", backgroundColor: "#ffffff", align: "center" }, 
+                r = GAME.add.text(0, 0, "", t);
+                r.anchor.set(.5, 2.4), r.padding.set(0), r.visible = !1, e.blr.bubble = r, 
+                this.heroBubbleGroup.add(e.blr.bubble), this.updateCreatureBubble(e)
             }, updateCreatureBubble: function (e) {
-                e.blr.bubble.visible && e.blr.info.lastMessage && (this.updateCreatureBubbleText(e),
-                    this.updateCreatureBubblePosition(e))
+                e.blr.bubble.visible && e.blr.info.lastMessage 
+                && (this.updateCreatureBubbleText(e), this.updateCreatureBubblePosition(e))
             }, updateCreatureBubbleText: function (e) {
                 var t = e.blr.info.lastMessage;
                 e.blr.bubble.setText(t)
@@ -1099,7 +1103,8 @@ var _typeof = "function" == typeof Symbol
 
                 var h = GAME.add.sprite(u.x, u.y, "shadow");
                 return h.anchor.set(.1), h.scale.setTo(.7, .7), h.alpha = .3, u.blr.shadow = h, this.monsterShadowGroup.add(u.blr.shadow), 
-                    this.setCreatureLabel(u), this.logCreatureRespawning(u), UI.addCreatureIdToCreatureList(u.blr.info.id, "monster"), u
+                    this.setCreatureLabel(u), this.logCreatureRespawning(u), 
+                    UI.addCreatureIdToCreatureList(u.blr.info.id, "monster"), u
             }, spawnPlayer: function (e) {
                 var t = new h(e);
                 this.player = this.spawnHero(t, t.info.lastVector), 
@@ -1114,18 +1119,15 @@ var _typeof = "function" == typeof Symbol
                 this.enemyArrowGroup.add(r.blr.bullet), 
                 UI.addCreatureIdToCreatureList(r.blr.info.id, "enemy"),
                 r.body.moves = !1
-            }, spawnHero: function (e, t) {
+            }, 
+            //#########################
+            spawnHero: function (e, t) {
+                var _user_id        = $('#user_id').val();
+                // if(e.info.id != _user_id){ alert('e.info.id:'+e.info.id + '/ _user_id : ' + _user_id);}
                 void 0 === t && (t = e.info.startVector);
-//#############################################
-// hero - player
-//GAME.textures.remove("hero")
-//GAME.load.spritesheet("hero", "/public/dist/asset/image/hero.png", 46, 46),
-// GAME.load.image("hero", "/public/dist/asset/image/upload/"+e.info.id+".png");
-// GAME.load.image("hero", "/public/dist/asset/image/upload/"+e.info.id+".png" , true);
-// GAME.load.reset(); 
-//#############################################
                 var r = e.phrInfo.bodyMass, 
-                    i = GAME.add.sprite(t.x, t.y, "hero"); // ############
+                    //i = GAME.add.sprite(t.x, t.y, "hero"); // ############
+                    i = (e.info.id != _user_id) ? GAME.add.sprite(t.x, t.y, "hero_"+e.info.id) : GAME.add.sprite(t.x, t.y, "hero");
                 i.rotation = t.rotation, 
                 i.blr = e, 
                 i.anchor.set(.5), 
@@ -1166,9 +1168,14 @@ var _typeof = "function" == typeof Symbol
             }, respawnMonster: function (e, t) { e.blr.label.revive(), e.blr.shadow.revive(), e.blr.weapon.revive(), e.revive(), 
                 e.blr.info = t, e.x = t.startVector.x, e.y = t.startVector.y, e.rotation = t.startVector.rotation, this.updateCreatureWeapon(e), 
                 this.updateCreatureShadow(e), this.updateCreatureBubblePosition(e), e.blr.reset(), this.logCreatureRespawning(e) 
-            }, respawnHero: function (e, t) { e.blr.label.revive(), e.blr.shadow.revive(), e.blr.weapon.revive(), e.blr.bubble.revive(), 
-                e.revive(), e.blr.info = t, e.x = t.startVector.x, e.y = t.startVector.y, e.rotation = t.startVector.rotation, 
-                this.updateCreatureWeapon(e), this.updateCreatureShadow(e), this.updateCreatureBubblePosition(e), e.blr.reset(), 
+            }, 
+            //#########################
+            respawnHero: function (e, t) { 
+                e.blr.label.revive(), e.blr.shadow.revive(), e.blr.weapon.revive(), e.blr.bubble.revive(), 
+                e.revive(), e.blr.info = t, e.x = t.startVector.x, 
+                e.y = t.startVector.y, e.rotation = t.startVector.rotation, 
+                this.updateCreatureWeapon(e), this.updateCreatureShadow(e), 
+                this.updateCreatureBubblePosition(e), e.blr.reset(), 
                 this.logCreatureRespawning(e) 
             }, debugMap: function () {
                 var e = this.VTMap.data, t = this.VTMap.mapTileWidth, r = this.VTMap.mapTileHeight, i = this.VTMap.nTileWidth,
@@ -1266,8 +1273,10 @@ var _typeof = "function" == typeof Symbol
                         && r > e.blr.info.lastDamageTimestamp + e.blr.info.immortalDelay
                         && (this.player.blr.updateLastDamageTimestamp(), e.blr.info.life - 1 <= 0 ? this.killCreature(e, t) : this.damageCreature(e, t))
                 }, recoverCreature: 
-                    function (e, t) { "hero" === e.blr.info.type ? this.recoverHero(e, t) : this.recoverMonster(e, t) }, recoverMonster:
-                    function (e, t) { }, recoverHero: function (e, t) {
+                    function (e, t) { "hero" === e.blr.info.type ? this.recoverHero(e, t) : this.recoverMonster(e, t) 
+                }, recoverMonster:
+                    function (e, t) { 
+                }, recoverHero: function (e, t) {
                         var r = e.blr.info;
                         i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector }, recoveredFrom: t })
                 }, damageCreature: 
