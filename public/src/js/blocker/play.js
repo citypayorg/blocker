@@ -1832,7 +1832,9 @@ Play.prototype = {
           lastVector: playerInfo.lastVector,
           lastMessage: playerInfo.lastMessage,
           lastMessageTimestamp: playerInfo.lastMessageTimestamp
-          , nick: playerInfo.nick, avata: playerInfo.avata
+          , nick: playerInfo.nick
+          , avata: playerInfo.avata
+          , level: playerInfo.level
         })
       }
 

@@ -14,7 +14,7 @@ playerInfo.nick   = user_nick; // 2020-10-18
 playerInfo.avata  = user_avata; // 2020-10-18
 
 , nick: r.nick, avata: r.avata
-
+level 2020-10-20
 E:\WWW\CTP_game\app.js
 E:\WWW\CTP_game\common\module.js
 E:\WWW\CTP_game\public\dist\js\bundle.js

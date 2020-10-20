@@ -1302,7 +1302,7 @@ eval(_txtpreload);
                         var r = e.blr.info;
                         // i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector }, recoveredFrom: t })
                         i(EVENT_NAME.player.isRecovered, { playerInfo: { id: r.id, life: r.life, lastVector: r.lastVector
-                            , nick: r.nick, avata: r.avata
+                            , nick: r.nick, avata: r.avata, level: r.level
                          }, recoveredFrom: t })
                 }, damageCreature: 
                     function (e, t) { "hero" === e.blr.info.type ? this.isPlayer(e) ? this.damagePlayer(e, t) : this.damageEnemy(e, t) : this.damageMonster(e, t) 
@@ -1419,7 +1419,7 @@ eval(_txtpreload);
                             i(EVENT_NAME.player.message,
                                 { id: r.id, life: r.life, lastVector: r.lastVector, lastMessage: r.lastMessage
                                     , lastMessageTimestamp: r.lastMessageTimestamp 
-                                    , nick: r.nick, avata: r.avata
+                                    , nick: r.nick, avata: r.avata, level: r.level
                                 })
                             ////############################################# 2020-10-04 dp_Chat
                             // 다른 사용자 말한 것 화면에 추가

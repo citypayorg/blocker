@@ -149,7 +149,7 @@ APP.post('/', function (req, res) {
         });
         // login 성공
         res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
-        res.end(indexPage(user_id,user_nick,user_avata)); 
+        res.end(indexPage(user_id,user_nick,user_avata,user_level)); 
 
       }else{
         res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
@@ -371,7 +371,7 @@ function getNewBatInfo () {
  */
 function getNewPlayerInfo () {
   // return getNewCreatureInfo('hero', 200, 3, 8)
-  return getNewCreatureInfo('hero', 200, 3, 8,user_nick,user_avata)
+  return getNewCreatureInfo('hero', 200, 3, 8,user_nick,user_avata,user_level)
 }
 
 /**
@@ -383,11 +383,11 @@ function getNewPlayerInfo () {
  * @returns {CreatureInfo}
  */
 // function getNewCreatureInfo (type, velocitySpeed, life, maxLife) {
-function getNewCreatureInfo (type, velocitySpeed, life, maxLife, nick ,avata) {
+function getNewCreatureInfo (type, velocitySpeed, life, maxLife, nick ,avata ,level) {
   const creatureId = getUniqueCreatureId()
   const startVector = getRandomStartCreatureVector()
   // const creatureInfo = new CreatureInfo(creatureId, type, startVector, velocitySpeed, life, maxLife)
-  const creatureInfo = new CreatureInfo(creatureId, type, startVector, velocitySpeed, life, maxLife, nick ,avata)
+  const creatureInfo = new CreatureInfo(creatureId, type, startVector, velocitySpeed, life, maxLife, nick ,avata, level)
   //, nick ,avata 의 data 필요 ....
   return creatureInfo
 }
@@ -641,6 +641,7 @@ IO.on('connection', function (socket) {
   playerInfo.id     = user_id;
   playerInfo.nick   = user_nick; // 2020-10-18
   playerInfo.avata  = user_avata; // 2020-10-18
+  playerInfo.level  = user_level; // 2020-10-20
 
   //#############################################
   
@@ -1179,7 +1180,7 @@ function getPreLimg(_param, callback){
 }
 
 //2020-10-12 index.html 페이지 서버 단으로 이동
-function indexPage(_user_id,_user_nick,_user_avata){
+function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   var _html = '';
   _html = _html +'<!doctype html>';
   _html = _html +'<html>';
@@ -1341,6 +1342,7 @@ function indexPage(_user_id,_user_nick,_user_avata){
   _html = _html +'<input type="hidden" id="user_id" value="'+_user_id+'">';
   _html = _html +'<input type="hidden" id="user_nick" value="'+_user_nick+'">';
   _html = _html +'<input type="hidden" id="user_avata" value="'+_user_avata+'">';
+  _html = _html +'<input type="hidden" id="user_level" value="'+_user_level+'">';
   _html = _html +'<input type="hidden" id="user_preloadImg" value="'+_addimage+'">';
   //########################################
   _html = _html +'</body>';

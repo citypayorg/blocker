@@ -86,9 +86,10 @@ Vector.prototype.updateByJson = function (obj) {
  * @param {number} maxLife
  * @param {string} nick  // 2020-10-18
  * @param {string} avata // 2020-10-18
+ * @param {string} level // 2020-10-20
  */
 // const CreatureInfo = function (id, type, startVector, velocitySpeed, life, maxLife) {
-  const CreatureInfo = function (id, type, startVector, velocitySpeed, life, maxLife, nick ,avata ) {
+  const CreatureInfo = function (id, type, startVector, velocitySpeed, life, maxLife, nick, avata, level ) {
   /** @type {string} */
   this.id = id
 
@@ -106,6 +107,9 @@ Vector.prototype.updateByJson = function (obj) {
   /** @type {string} */
   this.avata = avata
 
+  /** @type {number} */
+  this.level = level
+  
   /** @type {number} immortal delay (milliseconds) */
   this.immortalDelay = 800
 
