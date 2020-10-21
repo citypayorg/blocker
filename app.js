@@ -298,9 +298,9 @@ function initMonsters () {
   // const nZombies = 8
   // const nMachines = 8
   // const nBats = 8
-  const nZombies = 1
-  const nMachines = 1
-  const nBats = 1
+  const nZombies  = 8; //리스폰 되는 몬스터 숫자 좀비
+  const nMachines = 8; //리스폰 되는 몬스터 숫자 머신
+  const nBats     = 8; //리스폰 되는 몬스터 숫자 박쥐
 
   //########### 미니맵 ###########
   for (let i = 0; i < nZombies; i++) {
