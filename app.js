@@ -298,9 +298,9 @@ function initMonsters () {
   // const nZombies = 8
   // const nMachines = 8
   // const nBats = 8
-  const nZombies  = 8; //리스폰 되는 몬스터 숫자 좀비
-  const nMachines = 8; //리스폰 되는 몬스터 숫자 머신
-  const nBats     = 8; //리스폰 되는 몬스터 숫자 박쥐
+  const nZombies  = 4; //리스폰 되는 몬스터 숫자 좀비
+  const nMachines = 4; //리스폰 되는 몬스터 숫자 머신
+  const nBats     = 4; //리스폰 되는 몬스터 숫자 박쥐
 
   //########### 미니맵 ###########
   for (let i = 0; i < nZombies; i++) {
@@ -1231,7 +1231,10 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   _html = _html +'<p id="dp_Xy" class="message-input noselect" style="margin-bottom:135px;margin-left:-100px;width:120px;" onclick="this.blur();">X:0,Y:0</p>';
   _html = _html +'<div id="dp_Chat" class="message-input noselect" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;" onclick="this.blur();">';
   //2020-10-16 채팅로그추가
-  _html = _html +'적립토큰수(1000개=1코인) : ' +  user_level +'<br/>';
+  _html = _html +'현재 게임 서버는 테스트입니다, 추후 초기화 될 수 있습니다. 관심 가져주셔서 감사드립니다.<br/>';
+  _html = _html +'15분 마다 캐릭터의 경험치와 토큰(BCK)이 적립됩니다.<br/>';
+  _html = _html +'적립토큰수 : ' +  user_level +'<br/>';
+
   _html = _html +'---------- pre log ----------<br/>';
   _html = _html +'' + _preMsg+'<br/>';
   _html = _html +'</div>';
