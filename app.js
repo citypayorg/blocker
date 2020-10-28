@@ -1225,6 +1225,10 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   // _html = _html +'    <!-- #logs -->';
   _html = _html +'  </div>';
   _html = _html +'</div>';
+  //상단 15분 프로그레스바
+  _html = _html +'<div style="width:260px"><progress value="0" max="100" id="ly_Progress" style="position:fixed;left:5px;top:0px;width:250px;height:8px;"></progress></div>';
+  _html = _html +'<div id="ly_Level" style="position:fixed;left:260px;top:2px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;">적립토큰수 : ' +  user_level +'</div>';
+  _html = _html +'<div id="ly_LeftTime" style="position:fixed;left:260px;top:17px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;z-index:9999;">15분</div>';
   _html = _html +'<input id="txt_chat" type="text" class="message-input" placeholder="Message" maxlength="20" style="width:90%;margin-bottom:135px;" >';
   // _html = _html +'<!-- .message-input -->';
   _html = _html +'<br/>';
@@ -1321,6 +1325,24 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   _html = _html +'    event.keyCode = strKey;';
   _html = _html +'    document.getElementById("game-wrap").dispatchEvent(event);';
   _html = _html +'  }';
+//프로그래스바 추가
+_html = _html +'  function jsfn_showProgress(){';
+_html = _html +'      var fm15 = 900, m15 = 900;';
+_html = _html +'      var x = setInterval(function() { ';
+_html = _html +'        min = parseInt(m15/60);';
+_html = _html +'        sec = m15%60;';
+_html = _html +'        _barper = Math.round(100 - ((m15/fm15)*100),1);';
+_html = _html +'        document.getElementById("ly_LeftTime").innerHTML = min + "분 " + sec + "초 "+ _barper +"% 진행중 " ;'; //
+_html = _html +'        document.getElementById("ly_Progress").value = _barper; ';
+_html = _html +'        m15--; ';
+_html = _html +'        if (m15 < 0){ ';
+_html = _html +'          clearInterval(x);';
+_html = _html +'          this.location.reload();';
+_html = _html +'        }';
+_html = _html +'      }, 1000);'; // 1초
+_html = _html +'    }';
+//_html = _html +'    setTimeout(jsfn_showProgress(),1500);'; // 1.5초
+_html = _html +'    jsfn_showProgress();';
 
   // 모바일 화면 회전시 캐시에서 reload 처리 
   _html = _html +' var _rotate_phone_cnt =0;';
