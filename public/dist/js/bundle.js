@@ -1215,7 +1215,7 @@ eval(_txtpreload);
                     var e = GAME.add.bitmapData(5 * this.VTMap.nTileWidth, 5 * this.VTMap.nTileHeight), t = void 0, r = 0;
                     r < this.VTMap.nTileHeight;r++)
                     for ( var i = 0; i < this.VTMap.nTileWidth; i++) {
-                        var o = "#36a941", n = 5 * i, a = 5 * r;
+                        var o = "#686868", n = 5 * i, a = 5 * r; //미니맵배경색
                         switch (this.VTMap.data[r][i]) {
                             case 1: o = "#4ed469"; break;
                             case 3: o = "#b4baaf"; break;
@@ -1734,7 +1734,7 @@ eval(_txtpreload);
                     GAME.time.advancedTiming = !0, 
                     GAME.world.setBounds(0, 0, GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT),
                     GAME.physics.startSystem(Phaser.Physics.ARCADE), 
-                    GAME.stage.backgroundColor = "#3db148";
+                    GAME.stage.backgroundColor = "#181819";
 
                     var e = GAME.add.tilemap("mapTile");
                     e.addTilesetImage("map"), this.floorGroup = e.createLayer(0), this.floorGroup.resizeWorld(),
