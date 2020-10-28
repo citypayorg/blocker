@@ -130,23 +130,23 @@ APP.post('/', function (req, res) {
         user_level  = rows[0].user_level;
         user_CTP_address= rows[0].CTP_address;
         // console.log('유저레벨:'+user_level);
-        user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
-
-        var sql2 = " "; 
-        sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
-        sql2 = sql2 + " VALUES (1,?,'CTP',?,CURDATE()+0,?) ";
-        sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1, last_time=now() ";
-        var params = [rows[0].id, rows[0].CTP_address, user_ip];
-        conn.query(sql2, params, function(err, rows2, fields2){
-          if(err){
-            console.log(err);
-            //conn.release();
-          } else {
-            console.log('merge success !!!!');
-            // console.log(rows2);
-            //conn.release();
-          }
-        });
+        // user_ip = req.headers['x-forwarded-for'] ||req.connection.remoteAddress ||req.socket.remoteAddress ||req.connection.socket.remoteAddress;
+        intervalLvUpFunc();
+        // var sql2 = " "; 
+        // sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
+        // sql2 = sql2 + " VALUES (1,?,'CTP',?,CURDATE()+0,?) ";
+        // //sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1, last_time=now() "; //무조건 +1 되는 버그로 Merge 문 X 
+        // var params = [rows[0].id, rows[0].CTP_address, user_ip];
+        // conn.query(sql2, params, function(err, rows2, fields2){
+        //   if(err){
+        //     console.log(err);
+        //     //conn.release();
+        //   } else {
+        //     console.log('merge success !!!!');
+        //     // console.log(rows2);
+        //     //conn.release();
+        //   }
+        // });
         // login 성공
         res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
         res.end(indexPage(user_id,user_nick,user_avata,user_level)); 
@@ -1104,7 +1104,7 @@ function getPreChatLog(_param, callback){
 
 // 15분마다 레벨을 올려주자~~~~
 // SELECT last_time ,TIMESTAMPDIFF(SECOND, last_time, NOW() ) AS TDiff FROM `tbl_game` WHERE game_idx='1' and user_idx='2' and yyyymmdd=CURDATE()+0;
-function intervalFunc() {
+function intervalLvUpFunc() {
 
   var conn = db_config.init();//2020-09-13
   db_config.connect(conn);
@@ -1138,7 +1138,7 @@ function intervalFunc() {
         var sql2 = " "; 
         sql2 = sql2 + " INSERT INTO `tbl_game`(`game_idx`, `user_idx`, `user_coin`, `coin_address`, `yyyymmdd`, `ip`) ";
         sql2 = sql2 + " VALUES (1,?,'CTP',?,CURDATE()+0,?) ";
-        sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1, last_time=now() ";
+        sql2 = sql2 + " ON DUPLICATE KEY UPDATE minuteCnt = minuteCnt + 1, last_time=now() "; 
         var params2 = [user_id, user_CTP_address, user_ip];
         conn.query(sql2, params2, function(err2, rows2, fields2){
           if(err2){ console.log(err2);
@@ -1151,7 +1151,7 @@ function intervalFunc() {
   });
 }
 
-setInterval(intervalFunc, 1000*_levelUpTime); // 15분 마다 로그 쌓기
+setInterval(intervalLvUpFunc, 1000*_levelUpTime); // 15분 마다 로그 쌓기
 
 // 로그인 시 이전 대화 로그 50개 가저 오기
 var _preMsg = getPreChatLog(null, function(_result){_preMsg = _result; }); //이전 대화(Chat)로그 50개
@@ -1332,7 +1332,7 @@ _html = _html +'      var x = setInterval(function() { ';
 _html = _html +'        min = parseInt(m15/60);';
 _html = _html +'        sec = m15%60;';
 _html = _html +'        _barper = Math.round(100 - ((m15/fm15)*100),1);';
-_html = _html +'        document.getElementById("ly_LeftTime").innerHTML = min + "분 " + sec + "초 "+ _barper +"% 진행중 " ;'; //
+_html = _html +'        document.getElementById("ly_LeftTime").innerHTML = min + ":" + sec + " "+ _barper +"% 진행" ;'; //
 _html = _html +'        document.getElementById("ly_Progress").value = _barper; ';
 _html = _html +'        m15--; ';
 _html = _html +'        if (m15 < 0){ ';
