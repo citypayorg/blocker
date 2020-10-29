@@ -298,9 +298,9 @@ function initMonsters () {
   // const nZombies = 8
   // const nMachines = 8
   // const nBats = 8
-  const nZombies  = 4; //리스폰 되는 몬스터 숫자 좀비
-  const nMachines = 4; //리스폰 되는 몬스터 숫자 머신
-  const nBats     = 4; //리스폰 되는 몬스터 숫자 박쥐
+  const nZombies  = 0; //리스폰 되는 몬스터 숫자 좀비
+  const nMachines = 0; //리스폰 되는 몬스터 숫자 머신
+  const nBats     = 0; //리스폰 되는 몬스터 숫자 박쥐
 
   //########### 미니맵 ###########
   for (let i = 0; i < nZombies; i++) {
@@ -1225,10 +1225,11 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   // _html = _html +'    <!-- #logs -->';
   _html = _html +'  </div>';
   _html = _html +'</div>';
+
   //상단 15분 프로그레스바
   _html = _html +'<div style="width:260px"><progress value="0" max="100" id="ly_Progress" style="position:fixed;left:5px;top:0px;width:250px;height:8px;"></progress></div>';
   _html = _html +'<div id="ly_Level" style="position:fixed;left:260px;top:2px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;">적립토큰수 : ' +  user_level +'</div>';
-  _html = _html +'<div id="ly_LeftTime" style="position:fixed;left:260px;top:17px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;z-index:9999;">15분</div>';
+  _html = _html +'<div id="ly_LeftTime" style="position:fixed;left:260px;top:17px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;z-index:99;">15분</div>';
   _html = _html +'<input id="txt_chat" type="text" class="message-input" placeholder="Message" maxlength="20" style="width:90%;margin-bottom:135px;" >';
   // _html = _html +'<!-- .message-input -->';
   _html = _html +'<br/>';
@@ -1243,7 +1244,7 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   _html = _html +'' + _preMsg+'<br/>';
   _html = _html +'</div>';
 
-  _html = _html +'<div id="lyLeftmove" class="noselect" style="position:fixed;text-align:center;right:5px;top:180px;width:85px;height:170px;background-color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);border-radius:5px;" onclick="this.blur();">';
+  _html = _html +'<div id="lyLeftmove" class="noselect" style="position:fixed;text-align:center;right:5px;top:180px;width:85px;height:170px;background-color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);border-radius:5px;z-index:99;" onclick="this.blur();">';
   _html = _html +'  <table border="0"><tr><td colspan="2" align="center"><img id="img_up" src="/public/dist/asset/image/move/up.png" border="0" style="width:40px;height:40px;"></td></tr>';
   _html = _html +'  <tr><td><img id="img_left" src="/public/dist/asset/image/move/left.png"   border="0" style="width:40px;height:40px;"></td>';
   _html = _html +'  <td><img id="img_right" src="/public/dist/asset/image/move/right.png" border="0" style="width:40px;height:40px;"></td></tr>';
@@ -1251,6 +1252,11 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   // _html = _html +'  <!-- space 32 -->';
   _html = _html +'  <tr><td colspan="2" align="center"><img id="img_chat" src="/public/dist/asset/image/move/chat.png"   border="0" onclick="jsfn_MoveChat();" style="width:40px;height:40px;" alt="모바일 상에서는 클릭시 대화시작 다시 클릭시 대화전송 입니다."></td></tr></table>';
   _html = _html +'</div>';
+  // 밤하늘배경
+  _html = _html +'<div class="stars"></div>';
+  _html = _html +'<div class="twinkling"></div>';
+  _html = _html +'<div class="shooting-stars"></div>';
+
   _html = _html +'<script>';
   //만약 두 손가락으로 화면을 클릭 시 이 이벤트를 무시
   _html = _html +'  document.documentElement.addEventListener("touchstart", function (event) { if (event.touches.length > 1) { event.preventDefault(); } }, false); ';
@@ -1363,6 +1369,21 @@ _html = _html +'    jsfn_showProgress();';
   _html = _html +'<script src="/public/bower_components/phaser/build/phaser.min.js"></script>';
   _html = _html +'<script src="/public/bower_components/phaser-state-transition-plugin/dist/phaser-state-transition-plugin.min.js"></script>';
   _html = _html +'<script src="/public/dist/js/bundle.js"></script>';
+  _html = _html +'<script src="/public/dist/js/shootingstars.js"></script>';
+  _html = _html +'<script>';
+  _html = _html +'(function($){';
+  _html = _html +'$( document ).ready( function(){';
+  _html = _html +'var shootingStarObj = new ShootingStar( ".shooting-stars" );';
+  _html = _html +'        shootingStarObj.launch();';
+  _html = _html +'$("input").keypress(function(event) {';
+  _html = _html +'if (event.which == 13) {';
+  _html = _html +'event.preventDefault();';
+  _html = _html +'$("form").submit();';
+  _html = _html +'}';
+  _html = _html +'});';
+  _html = _html +'});';
+  _html = _html +'})(jQuery);';
+  _html = _html +'</script>';
   //########################################
   _html = _html +'<input type="hidden" id="user_id" value="'+_user_id+'">';
   _html = _html +'<input type="hidden" id="user_nick" value="'+_user_nick+'">';

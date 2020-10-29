@@ -75,6 +75,7 @@ select {
 
 canvas {
   display: block;
+  z-index: 10;
 }
 
 ::-webkit-scrollbar {
@@ -155,20 +156,21 @@ canvas {
 }
 
 .creatures {
-  
   li {
-    opacity: .6;
-    color: @accent;
+    opacity: 0.6;
+    color: accent;
     display: none;
 
-    &.player {
+    .player {
       display: block;
-      color: @white;
+      color: white;
+      z-index: 10;
     }
 
-    &.enemy {
+    .enemy {
       display: block;
-      color: @blue;
+      color: blue;
+      z-index: 10;
     }
   }
 }
@@ -234,37 +236,81 @@ canvas {
   }
 }
 
-// http://tholman.com/github-corners/
-@keyframes octocat-wave{
-  0%,100% { transform: rotate(0) }
-  20%,60% { transform: rotate(-25deg) }
-  40%,80% { transform: rotate(10deg) }
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
-.github-corner {
-  z-index: 4;
+@keyframes move-twink-back {
+  from {background-position:0 0;}
+  to {background-position:-10000px 5000px;}
+}
+@-webkit-keyframes move-twink-back {
+  from {background-position:0 0;}
+  to {background-position:-10000px 5000px;}
+}
+@-moz-keyframes move-twink-back {
+  from {background-position:0 0;}
+  to {background-position:-10000px 5000px;}
+}
+@-ms-keyframes move-twink-back {
+  from {background-position:0 0;}
+  to {background-position:-10000px 5000px;}
+}
+
+
+body { 
+  width:100%;
+  height: 100%; 
+  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+.stars, .twinkling, .clouds, .shooting-stars {
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+width:100%;
+height:100%;
+display:block;
+}
+
+.shooting-stars {
   position: absolute;
-  top: 0;
-  border: 0;
-  right: 0;
+  transform:translate3D(0em, 0em, 0); 
+  animation: stars 21s ease; 
+  transform-style: preserve-3d; 
+  z-index: 25;
+}
 
-  &:hover {
 
-    .octo-arm {
-      animation: octocat-wave 560ms ease-in-out
-    }
-  }
+.stars {
+background: #000 url(/public/dist/asset/image/space.png) repeat top center;
+z-index:1;
+opacity: 0.5;
+}
 
-  @media (max-width:500px) {
-    .octo-arm {
-      animation: octocat-wave 560ms ease-in-out
-    }
+.twinkling{
+background:transparent url(/public/dist/asset/image/twinkl.png) repeat top center;
+z-index:2;
+opacity: 0.1;
 
-    &:hover {
+-moz-animation:move-twink-back 200s linear infinite;
+-ms-animation:move-twink-back 200s linear infinite;
+-o-animation:move-twink-back 200s linear infinite;
+-webkit-animation:move-twink-back 200s linear infinite;
+animation:move-twink-back 200s linear infinite;
+}
 
-      .octo-arm {
-        animation: none
-      }
-    }
+
+@media screen and (max-width: 1024px) and (max-height:700px) {
+  .logo {
+      top: 25%;
+      width:175px;
+      height: 168px;
+      margin-top: -42px;
+      margin-left: -87px;
   }
 }
