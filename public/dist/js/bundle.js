@@ -936,8 +936,8 @@ var _typeof = "function" == typeof Symbol
 // GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46), 
 // GAME.load.image("hero", "/public/dist/asset/image/upload/"+e.info.id+".png", 46, 46)
 _txtpreload=_txtpreload +'(_user_avata=="N"||_user_avata==""||_user_avata==null)? ';
-_txtpreload=_txtpreload +'GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 46, 46) ';
-_txtpreload=_txtpreload +': GAME.load.image("hero", "/public/dist/asset/image/upload/"+_user_id+".png", 46, 46),';
+_txtpreload=_txtpreload +'GAME.load.spritesheet("hero", i.assetPath + "/image/hero.png", 20, 20) ';
+_txtpreload=_txtpreload +': GAME.load.image("hero", "/public/dist/asset/image/upload/"+_user_id+".png", 20, 20),';
 //################################################
 _txtpreload=_txtpreload + _user_preloadImg    // 2020-10-18 사용자 아바타
 _txtpreload=_txtpreload +'GAME.load.image("dashParticle",         i.assetPath + "/image/particle/dash.png"),';
@@ -947,7 +947,8 @@ _txtpreload=_txtpreload +'GAME.load.image("shadow",               i.assetPath + 
 _txtpreload=_txtpreload +'GAME.load.spritesheet("handsWeapon",    i.assetPath + "/image/weapon/hands.png"     , 80, 70),';
 _txtpreload=_txtpreload +'GAME.load.spritesheet("laserTurretWeapon", i.assetPath + "/image/weapon/laser-turret.png", 52, 46),';
 _txtpreload=_txtpreload +'GAME.load.spritesheet("wingsWeapon",    i.assetPath + "/image/weapon/wings.png"     , 46, 84),';
-_txtpreload=_txtpreload +'GAME.load.spritesheet("bowWeapon",      i.assetPath + "/image/weapon/bow.png"       , 160, 160),';
+// _txtpreload=_txtpreload +'GAME.load.spritesheet("bowWeapon",      i.assetPath + "/image/weapon/bow.png"       , 160, 160),';
+_txtpreload=_txtpreload +'GAME.load.spritesheet("bowWeapon",      i.assetPath + "/image/weapon/bow.png"       , 80, 80),';
 _txtpreload=_txtpreload +'GAME.load.image("laserBullet",          i.assetPath + "/image/bullet/laser.png"),';
 _txtpreload=_txtpreload +'GAME.load.image("arrowBullet",          i.assetPath + "/image/bullet/arrow.png")';
 eval(_txtpreload);
@@ -1734,7 +1735,9 @@ eval(_txtpreload);
                     GAME.time.advancedTiming = !0, 
                     GAME.world.setBounds(0, 0, GAME_WORLD_WIDTH, GAME_WORLD_HEIGHT),
                     GAME.physics.startSystem(Phaser.Physics.ARCADE), 
-                    GAME.stage.backgroundColor = "#181819";
+                    GAME.stage.backgroundColor = "#181819",
+                    GAME.stage.transparent=true // 2020-10-30 배경 투명
+                    ;
 
                     var e = GAME.add.tilemap("mapTile");
                     e.addTilesetImage("map"), this.floorGroup = e.createLayer(0), this.floorGroup.resizeWorld(),

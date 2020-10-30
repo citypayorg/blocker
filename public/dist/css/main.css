@@ -288,14 +288,14 @@ display:block;
 
 .stars {
 background: #000 url(/public/dist/asset/image/space.png) repeat top center;
-z-index:1;
-opacity: 0.5;
+z-index:0;
+opacity: 0.2;
 }
 
 .twinkling{
 background:transparent url(/public/dist/asset/image/twinkl.png) repeat top center;
-z-index:2;
-opacity: 0.1;
+z-index:1;
+opacity: 0.024;
 
 -moz-animation:move-twink-back 200s linear infinite;
 -ms-animation:move-twink-back 200s linear infinite;

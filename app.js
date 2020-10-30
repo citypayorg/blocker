@@ -97,7 +97,11 @@ APP.use(expressSession({
     resave : true,
     saveUninitialized :true
     }));
-
+    // secret: 세션을 암호화 해줌
+    // resave: 세션을 항상 저장할지 여부를 정하는 값. (false 권장)
+    // saveUninitialized: 초기화되지 않은채 스토어에 저장되는 세션
+    // store: 데이터를 저장되는 형식 ex ) store: new FileStore()
+    // 사용 : req.session 
 
 // post 로 넘어 오면 !!! 게임
 APP.post('/', function (req, res) {
@@ -196,7 +200,7 @@ APP.post('/', function (req, res) {
 
 // APP.get('/process/login2', function (req, res) {
 //   res.writeHead("200", {"Content-Type":"text/html;charset=utf-8"});
-// 	res.end("<h1>Express 서버에서 " + req.user + " 응답한 결과입니다</h1>"); 
+//  res.end("<h1>Express 서버에서 " + req.user + " 응답한 결과입니다</h1>"); 
 // })
       
 var errorHandler = expressErrorHandler({
@@ -1198,21 +1202,21 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   _html = _html +'<script src="http://code.jquery.com/jquery-latest.min.js"></script>';
   _html = _html +'</head>';
   _html = _html +'<body class="noselect">';
-  _html = _html +'<div class="logo roboto">';
+  _html = _html +'<div class="logo roboto" style="z-index:4;">';
   _html = _html +'  Blocker - The Hunter: Multiplayer online game';
   _html = _html +'</div>';
-  _html = _html +'<div class="container-fluid">';
-  _html = _html +'  <div class="row">';
-  _html = _html +'    <div class="wrapper">';
-  _html = _html +'      <div id="game-wrap">';
+  _html = _html +'<div class="container-fluid" style="z-index:4;">';
+  _html = _html +'  <div class="row" style="z-index:4;">';
+  _html = _html +'    <div class="wrapper" style="z-index:4;">';
+  _html = _html +'      <div id="game-wrap" style="z-index:4;">';
   _html = _html +'      </div>';
   // _html = _html +'      <!-- #game-wrap -->';
   _html = _html +'    </div>';
   _html = _html +'  </div>';
   _html = _html +'</div>';
-  _html = _html +'<div id="sidebar" class="sidebar noselect transition">';
-  _html = _html +'  <div id="creature-widget" class="widget creature-widget">';
-  _html = _html +'    <ul class="creatures" id="creatures">';
+  _html = _html +'<div id="sidebar" class="sidebar noselect transition" style="z-index:4;">';
+  _html = _html +'  <div id="creature-widget" class="widget creature-widget" style="z-index:4;">';
+  _html = _html +'    <ul class="creatures" id="creatures" style="z-index:4;">';
   _html = _html +'    </ul>';
   // _html = _html +'    <!-- #creatures -->';
   _html = _html +'  </div>';
@@ -1227,14 +1231,14 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   _html = _html +'</div>';
 
   //상단 15분 프로그레스바
-  _html = _html +'<div style="width:260px"><progress value="0" max="100" id="ly_Progress" style="position:fixed;left:5px;top:0px;width:250px;height:8px;"></progress></div>';
-  _html = _html +'<div id="ly_Level" style="position:fixed;left:260px;top:2px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;">적립토큰수 : ' +  user_level +'</div>';
+  _html = _html +'<div style="width:260px;z-index:99;"><progress value="0" max="100" id="ly_Progress" style="position:fixed;left:5px;top:0px;width:250px;height:8px;z-index:99;"></progress></div>';
+  _html = _html +'<div id="ly_Level" style="position:fixed;left:260px;top:2px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;z-index:99;">적립토큰수 : ' +  user_level +'</div>';
   _html = _html +'<div id="ly_LeftTime" style="position:fixed;left:260px;top:17px;width:100px;height:20px;color:#FFFFFF;font-size:10.5px;z-index:99;">15분</div>';
   _html = _html +'<input id="txt_chat" type="text" class="message-input" placeholder="Message" maxlength="20" style="width:90%;margin-bottom:135px;" >';
   // _html = _html +'<!-- .message-input -->';
   _html = _html +'<br/>';
-  _html = _html +'<p id="dp_Xy" class="message-input noselect" style="margin-bottom:135px;margin-left:-100px;width:120px;" onclick="this.blur();">X:0,Y:0</p>';
-  _html = _html +'<div id="dp_Chat" class="message-input noselect" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align: left;" onclick="this.blur();">';
+  _html = _html +'<p id="dp_Xy" class="message-input noselect" style="margin-bottom:135px;margin-left:-100px;width:120px;z-index:99;" onclick="this.blur();">X:0,Y:0</p>';
+  _html = _html +'<div id="dp_Chat" class="message-input noselect" style="width:90%;height:130px;margin: 0 0 0 -100px;overflow-y:scroll;text-align:left;z-index:99;" onclick="this.blur();">';
   //2020-10-16 채팅로그추가
   _html = _html +'현재 게임 서버는 테스트입니다, 추후 초기화 될 수 있습니다. 관심 가져주셔서 감사드립니다.<br/>';
   _html = _html +'15분 마다 캐릭터의 경험치와 토큰(BCK)이 적립됩니다.<br/>';
@@ -1253,9 +1257,9 @@ function indexPage(_user_id,_user_nick,_user_avata,_user_level){
   _html = _html +'  <tr><td colspan="2" align="center"><img id="img_chat" src="/public/dist/asset/image/move/chat.png"   border="0" onclick="jsfn_MoveChat();" style="width:40px;height:40px;" alt="모바일 상에서는 클릭시 대화시작 다시 클릭시 대화전송 입니다."></td></tr></table>';
   _html = _html +'</div>';
   // 밤하늘배경
-  _html = _html +'<div class="stars"></div>';
-  _html = _html +'<div class="twinkling"></div>';
-  _html = _html +'<div class="shooting-stars"></div>';
+  _html = _html +'<div class="stars" style="z-index:0;"></div>';
+  _html = _html +'<div class="twinkling" style="z-index:1;"></div>';
+  _html = _html +'<div class="shooting-stars" style="z-index:2;"></div>';
 
   _html = _html +'<script>';
   //만약 두 손가락으로 화면을 클릭 시 이 이벤트를 무시
